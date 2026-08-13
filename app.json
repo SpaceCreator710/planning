@@ -1,0 +1,110 @@
+{
+  "expo": {
+    "name": "AI Plan Your Day",
+    "slug": "ai-plan-your-day",
+    "version": "6.0.0",
+    "description": "A personal AI accountability coach that plans, rescues, and learns from your day.",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "aiplanyourday",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "icon": "./assets/images/icon.png",
+      "bundleIdentifier": "com.aiplanyourday.app",
+      "supportsTablet": true,
+      "usesAppleSignIn": true,
+      "entitlements": {
+        "com.apple.developer.healthkit": true,
+        "com.apple.security.application-groups": [
+          "group.com.aiplanyourday.app"
+        ]
+      },
+      "infoPlist": {
+        "NSHealthShareUsageDescription": "AI Plan Your Day reads the health summaries you choose so Capacity Twin can suggest a realistic workload. It does not diagnose conditions.",
+        "NSCalendarsFullAccessUsageDescription": "AI Plan Your Day imports events you choose so important dates and fixed commitments stay protected in your plan.",
+        "NSRemindersFullAccessUsageDescription": "AI Plan Your Day imports reminders you choose into your task chain."
+      }
+    },
+    "android": {
+      "package": "com.aiplanyourday.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-apple-authentication",
+      "expo-localization",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "Allow AI Plan Your Day to read your selected calendar events and protect important dates in your plan.",
+          "remindersPermission": "Allow AI Plan Your Day to import selected Apple Reminders into your task chain."
+        }
+      ],
+      [
+        "expo-sharing",
+        {
+          "ios": {
+            "enabled": true,
+            "appGroupId": "group.com.aiplanyourday.app",
+            "activationRule": {
+              "supportsText": true,
+              "supportsWebUrlWithMaxCount": 1,
+              "supportsFileWithMaxCount": 1
+            }
+          },
+          "android": {
+            "enabled": true,
+            "singleShareMimeTypes": ["text/plain", "text/*"]
+          }
+        }
+      ],
+      [
+        "expo-widgets",
+        {
+          "groupIdentifier": "group.com.aiplanyourday.app",
+          "enablePushNotifications": false,
+          "widgets": [
+            {
+              "name": "NextActionWidget",
+              "displayName": "Next Action",
+              "description": "Shows the next link in your day chain.",
+              "contentMarginsDisabled": false,
+              "supportedFamilies": ["systemSmall", "systemMedium", "accessoryCircular", "accessoryRectangular", "accessoryInline"]
+            }
+          ]
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/android-icon-monochrome.png",
+          "color": "#E3342F",
+          "defaultChannel": "day-coach"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FFFFFF",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 92
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

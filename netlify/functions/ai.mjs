@@ -55,7 +55,7 @@ const schemas = {
         items: {
           type: 'object',
           additionalProperties: false,
-          required: ['title', 'note', 'startTime', 'endTime', 'durationMinutes', 'section', 'category', 'priority', 'mustWin'],
+          required: ['title', 'note', 'startTime', 'endTime', 'durationMinutes', 'section', 'category', 'priority', 'mustWin', 'color', 'icon'],
           properties: {
             title: { type: 'string' },
             note: { type: 'string' },
@@ -66,6 +66,28 @@ const schemas = {
             category: { type: 'string', enum: ['focus', 'work', 'study', 'fitness', 'life', 'rest'] },
             priority: { type: 'integer', minimum: 1, maximum: 3 },
             mustWin: { type: 'boolean' },
+            color: { type: 'string', enum: ['red', 'coral', 'orange', 'gold', 'yellow', 'lime', 'green', 'mint', 'teal', 'cyan', 'blue', 'navy', 'indigo', 'violet', 'purple', 'pink', 'magenta', 'brown', 'gray'] },
+            icon: { type: 'string', enum: [
+              'alarm.fill', 'sun.max.fill', 'moon.fill', 'moon.zzz.fill', 'bed.double.fill', 'shower.fill',
+              'fork.knife', 'takeoutbag.and.cup.and.straw.fill', 'birthday.cake.fill', 'cup.and.saucer.fill', 'waterbottle.fill',
+              'desktopcomputer', 'laptopcomputer', 'briefcase.fill', 'doc.text.fill', 'pencil.and.list.clipboard',
+              'calendar', 'clock.fill', 'timer', 'phone.fill', 'video.fill', 'envelope.fill', 'message.fill',
+              'person.2.fill', 'person.3.fill', 'book.closed.fill', 'graduationcap.fill', 'brain.head.profile.fill',
+              'globe', 'character.book.closed.fill', 'figure.yoga', 'figure.run', 'figure.walk', 'figure.cooldown',
+              'figure.strengthtraining.traditional', 'dumbbell.fill', 'bicycle', 'soccerball', 'basketball.fill',
+              'tennis.racket', 'figure.pool.swim', 'figure.hiking', 'figure.dance', 'figure.mind.and.body',
+              'heart.fill', 'cross.case.fill', 'pills.fill', 'stethoscope', 'waveform.path.ecg',
+              'sparkles', 'house.fill', 'washer.fill', 'dishwasher.fill', 'cart.fill', 'basket.fill', 'trash.fill',
+              'shippingbox.fill', 'wrench.and.screwdriver.fill', 'hammer.fill', 'paintbrush.fill', 'scissors',
+              'music.note', 'headphones', 'camera.fill', 'photo.fill', 'film.fill', 'gamecontroller.fill', 'tv.fill',
+              'airplane', 'car.fill', 'tram.fill', 'bus.fill', 'ferry.fill', 'map.fill', 'location.fill',
+              'pawprint.fill', 'leaf.fill', 'tree.fill', 'cloud.sun.fill', 'umbrella.fill',
+              'gift.fill', 'balloon.2.fill', 'party.popper.fill', 'banknote.fill', 'creditcard.fill',
+              'checkmark.seal.fill', 'flag.fill', 'target', 'lightbulb.fill', 'bolt.fill', 'flame.fill',
+              'archivebox.fill', 'folder.fill', 'magnifyingglass', 'key.fill', 'lock.fill', 'checklist',
+              'list.bullet.clipboard.fill', 'note.text', 'rectangle.and.pencil.and.ellipsis', 'paintpalette.fill',
+              'building.2.fill', 'storefront.fill', 'theatermasks.fill', 'ticket.fill',
+            ] },
           },
         },
       },
@@ -187,9 +209,10 @@ function coachTone(mode) {
   if (mode === 'aggressive') {
     return [
       'Act as an intense AGGRESSIVE accountability coach using controlled confrontation and provocative honesty.',
-      'Use short forceful sentences. Interrupt the excuse, name the contradiction between the stated goal and the latest behavior, and expose the concrete cost of repeating it.',
-      'Force an honest binary choice: do the smallest action now or admit that avoidance is being chosen. Give a five-minute command with a visible finish line.',
-      'You may say that the user is negotiating with the task, protecting comfort, or voting for another zero day. Never insult, humiliate, shame, threaten or attack the person.',
+      'Use very short forceful sentences. No filler, no vague reassurance. Interrupt the excuse immediately, name the contradiction between the stated goal and the latest behavior, and expose the concrete cost of repeating it.',
+      'Ask one provocative direct question, then force an honest binary choice: do the smallest action now or explicitly choose delay. Give a five-minute command with a visible finish line.',
+      'You may say that the user is negotiating with the task, protecting comfort, rehearsing avoidance, or voting for another zero day. Challenge behavior hard, never the person.',
+      'Never insult, humiliate, shame, threaten or attack the person.',
       'Never target identity, intelligence, appearance, worth, health, family or protected traits. End with an immediate measurable action.',
     ].join(' ');
   }
@@ -206,11 +229,11 @@ function trimSlash(value) {
 
 function providerConfig() {
   return {
-    id: 'openrouter',
-    apiKey: process.env.OPENROUTER_API_KEY || '',
-    url: `${trimSlash(process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1')}/chat/completions`,
-    model: process.env.OPENROUTER_MODEL || 'deepseek/deepseek-v4-flash:free',
-    responseFormat: 'json_object',
+    id: 'groq',
+    apiKey: process.env.GROQ_API_KEY || '',
+    url: `${trimSlash(process.env.GROQ_BASE_URL || 'https://api.groq.com/openai/v1')}/chat/completions`,
+    model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
+    responseFormat: 'json_schema',
   };
 }
 
@@ -251,7 +274,7 @@ async function providerIsReachable(config) {
       model: config.model,
       messages: [{ role: 'user', content: 'Reply OK.' }],
       temperature: 0,
-      max_tokens: 8,
+      max_completion_tokens: 8,
     };
     const response = await fetch(config.url, {
       method: 'POST',
@@ -263,7 +286,7 @@ async function providerIsReachable(config) {
       checkedAt: Date.now(),
       ready: response.ok,
       status: response.status,
-      message: response.ok ? 'Built-in AI is ready.' : healthMessage(response.status),
+      message: response.ok ? 'Groq AI is ready.' : healthMessage(response.status),
     };
     healthCache.set(cacheKey, result);
     return result;
@@ -280,8 +303,6 @@ function providerHeaders(config) {
   return {
     Authorization: `Bearer ${config.apiKey}`,
     'Content-Type': 'application/json',
-    'HTTP-Referer': process.env.URL || 'https://ai-plan-your-day.app',
-    'X-OpenRouter-Title': 'AI Plan Your Day',
   };
 }
 
@@ -329,7 +350,8 @@ function systemFor({ schemaName, mode, language, operation, horizon }) {
       languageInstruction(language),
       'Build a feasible schedule, not a generic list.',
       'Respect fixed commitments, wake and sleep times, current time, energy, buffers, meals and recovery.',
-      'Resolve conflicts, add only useful support actions, protect exactly one must-win, and never overlap tasks.',
+      'Keep every duration explicitly supplied in plannedTasks exactly as selected by the user.',
+      'Resolve conflicts, protect exactly one must-win, and never overlap tasks. Leave useful empty gaps instead of inventing standalone break tasks unless the user explicitly requested a break.',
     ].join(' ');
   }
   if (schemaName === 'profile') {
@@ -358,6 +380,9 @@ export async function handler(event) {
     return json(event, health.ready ? 200 : health.status >= 400 && health.status < 500 ? health.status : 502, {
       ready: health.ready,
       server: true,
+      provider: healthConfig.id,
+      model: healthConfig.model,
+      product: 'Plan Your Day',
       message: health.message,
     });
   }
@@ -395,7 +420,7 @@ export async function handler(event) {
       { role: 'user', content: prompt },
     ],
     temperature: schemaName === 'coach' ? 0.55 : 0.25,
-    max_tokens: schemaName === 'coach' ? 1400 : schemaName === 'profile' ? 1800 : 3200,
+    max_completion_tokens: schemaName === 'coach' ? 1400 : schemaName === 'profile' ? 1800 : 3200,
     response_format: responseFormat(config, schemaName, schema),
   };
   try {

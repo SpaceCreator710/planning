@@ -1,7 +1,7 @@
 {
-  "name": "ai-plan-your-day",
+  "name": "plan-your-day",
   "main": "expo-router/entry",
-  "version": "6.0.0",
+  "version": "1.0.0",
   "packageManager": "npm@11.9.0",
   "dependencies": {
     "@expo/ui": "~57.0.10",

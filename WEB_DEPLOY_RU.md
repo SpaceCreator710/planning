@@ -15,8 +15,8 @@ npx netlify deploy --prod --dir dist --functions netlify/functions
 3. В Netlify добавь server-only переменные:
 
 ```text
-OPENROUTER_API_KEY=твой_секретный_ключ
-OPENROUTER_MODEL=deepseek/deepseek-v4-flash:free
+GROQ_API_KEY=твой_секретный_ключ
+GROQ_MODEL=openai/gpt-oss-120b
 ```
 
 4. Сделай deploy ещё раз после добавления переменных.

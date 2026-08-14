@@ -1,0 +1,110 @@
+import { categoryTaskColor } from '@/constants/tokens';
+import type { TaskCategory, TaskColor } from '@/types/app';
+
+export const taskColorChoices = [
+  'red', 'coral', 'orange', 'gold', 'yellow', 'lime', 'green', 'mint', 'teal', 'cyan',
+  'blue', 'navy', 'indigo', 'violet', 'purple', 'pink', 'magenta', 'brown', 'gray',
+] as const satisfies readonly TaskColor[];
+
+export const taskIconChoices = [
+  'alarm.fill', 'sun.max.fill', 'moon.fill', 'moon.zzz.fill', 'bed.double.fill', 'shower.fill',
+  'fork.knife', 'takeoutbag.and.cup.and.straw.fill', 'birthday.cake.fill', 'cup.and.saucer.fill', 'waterbottle.fill',
+  'desktopcomputer', 'laptopcomputer', 'briefcase.fill', 'doc.text.fill', 'pencil.and.list.clipboard',
+  'calendar', 'clock.fill', 'timer', 'phone.fill', 'video.fill', 'envelope.fill', 'message.fill',
+  'person.2.fill', 'person.3.fill', 'book.closed.fill', 'graduationcap.fill', 'brain.head.profile.fill',
+  'globe', 'character.book.closed.fill', 'figure.yoga', 'figure.run', 'figure.walk', 'figure.cooldown',
+  'figure.strengthtraining.traditional', 'dumbbell.fill', 'bicycle', 'soccerball', 'basketball.fill',
+  'tennis.racket', 'figure.pool.swim', 'figure.hiking', 'figure.dance', 'figure.mind.and.body',
+  'heart.fill', 'cross.case.fill', 'pills.fill', 'stethoscope', 'waveform.path.ecg',
+  'sparkles', 'house.fill', 'washer.fill', 'dishwasher.fill', 'cart.fill', 'basket.fill', 'trash.fill',
+  'shippingbox.fill', 'wrench.and.screwdriver.fill', 'hammer.fill', 'paintbrush.fill', 'scissors',
+  'music.note', 'headphones', 'camera.fill', 'photo.fill', 'film.fill', 'gamecontroller.fill', 'tv.fill',
+  'airplane', 'car.fill', 'tram.fill', 'bus.fill', 'ferry.fill', 'map.fill', 'location.fill',
+  'pawprint.fill', 'leaf.fill', 'tree.fill', 'cloud.sun.fill', 'umbrella.fill',
+  'gift.fill', 'balloon.2.fill', 'party.popper.fill', 'banknote.fill', 'creditcard.fill',
+  'checkmark.seal.fill', 'flag.fill', 'target', 'lightbulb.fill', 'bolt.fill', 'flame.fill',
+  'archivebox.fill', 'folder.fill', 'magnifyingglass', 'key.fill', 'lock.fill', 'checklist',
+  'list.bullet.clipboard.fill', 'note.text', 'rectangle.and.pencil.and.ellipsis', 'paintpalette.fill',
+  'building.2.fill', 'storefront.fill', 'theatermasks.fill', 'ticket.fill',
+] as const;
+
+const rules: { words: RegExp; icon: string; color: TaskColor; category?: TaskCategory }[] = [
+  { words: /просну|подъём|будиль|wake|alarm/i, icon: 'alarm.fill', color: 'coral', category: 'life' },
+  { words: /утрен|morning/i, icon: 'sun.max.fill', color: 'gold', category: 'life' },
+  { words: /сон|спать|sleep|bed/i, icon: 'bed.double.fill', color: 'navy', category: 'rest' },
+  { words: /йог|растяж|stretch|pilates/i, icon: 'figure.yoga', color: 'violet', category: 'fitness' },
+  { words: /медитац|дыхани|mindful|meditat/i, icon: 'figure.mind.and.body', color: 'purple', category: 'rest' },
+  { words: /размин|mobility|cooldown/i, icon: 'figure.cooldown', color: 'mint', category: 'fitness' },
+  { words: /бег|пробеж|run|jog/i, icon: 'figure.run', color: 'lime', category: 'fitness' },
+  { words: /прогул|walk|steps|шаг/i, icon: 'figure.walk', color: 'teal', category: 'fitness' },
+  { words: /поход|hike|hiking/i, icon: 'figure.hiking', color: 'green', category: 'fitness' },
+  { words: /плав|swim|pool/i, icon: 'figure.pool.swim', color: 'cyan', category: 'fitness' },
+  { words: /танц|dance/i, icon: 'figure.dance', color: 'magenta', category: 'fitness' },
+  { words: /футбол|soccer/i, icon: 'soccerball', color: 'green', category: 'fitness' },
+  { words: /баскет|basketball/i, icon: 'basketball.fill', color: 'orange', category: 'fitness' },
+  { words: /теннис|tennis/i, icon: 'tennis.racket', color: 'lime', category: 'fitness' },
+  { words: /спорт|трен|gym|workout|силов/i, icon: 'dumbbell.fill', color: 'green', category: 'fitness' },
+  { words: /готов|ужин|обед|завтрак|cook|meal/i, icon: 'fork.knife', color: 'orange', category: 'life' },
+  { words: /достав|takeout|еда на дом/i, icon: 'takeoutbag.and.cup.and.straw.fill', color: 'coral', category: 'life' },
+  { words: /торт|выпеч|пирог|bake|cake/i, icon: 'birthday.cake.fill', color: 'pink', category: 'life' },
+  { words: /кофе|coffee|чай|tea/i, icon: 'cup.and.saucer.fill', color: 'gold', category: 'rest' },
+  { words: /вод|water|hydr/i, icon: 'waterbottle.fill', color: 'cyan', category: 'life' },
+  { words: /душ|shower|ванн/i, icon: 'shower.fill', color: 'blue', category: 'life' },
+  { words: /магаз|покуп|grocer|shop/i, icon: 'cart.fill', color: 'yellow', category: 'life' },
+  { words: /стир|laundry|wash/i, icon: 'washer.fill', color: 'cyan', category: 'life' },
+  { words: /посуд|dish/i, icon: 'dishwasher.fill', color: 'teal', category: 'life' },
+  { words: /мусор|trash/i, icon: 'trash.fill', color: 'gray', category: 'life' },
+  { words: /уборк|clean|порядок/i, icon: 'sparkles', color: 'mint', category: 'life' },
+  { words: /ремонт|repair|почин/i, icon: 'wrench.and.screwdriver.fill', color: 'brown', category: 'life' },
+  { words: /звон|call|созвон/i, icon: 'phone.fill', color: 'green', category: 'work' },
+  { words: /видео|zoom|facetime/i, icon: 'video.fill', color: 'cyan', category: 'work' },
+  { words: /почт|email|письм/i, icon: 'envelope.fill', color: 'blue', category: 'work' },
+  { words: /сообщ|message|ответ/i, icon: 'message.fill', color: 'mint', category: 'work' },
+  { words: /встреч|meeting|команд/i, icon: 'person.2.fill', color: 'indigo', category: 'work' },
+  { words: /презентац|отчёт|report|document/i, icon: 'doc.text.fill', color: 'navy', category: 'work' },
+  { words: /план|список|checklist/i, icon: 'list.bullet.clipboard.fill', color: 'teal', category: 'focus' },
+  { words: /экзам|урок|домаш|study|learn|учеб/i, icon: 'graduationcap.fill', color: 'indigo', category: 'study' },
+  { words: /язык|english|русск|language/i, icon: 'character.book.closed.fill', color: 'purple', category: 'study' },
+  { words: /читать|книг|read/i, icon: 'book.closed.fill', color: 'violet', category: 'study' },
+  { words: /работ|код|проект|work|code|project/i, icon: 'desktopcomputer', color: 'blue', category: 'work' },
+  { words: /ноутбук|laptop/i, icon: 'laptopcomputer', color: 'navy', category: 'work' },
+  { words: /иде|think|research|исслед/i, icon: 'lightbulb.fill', color: 'yellow', category: 'focus' },
+  { words: /врач|doctor|clinic/i, icon: 'stethoscope', color: 'red', category: 'life' },
+  { words: /лекар|pill|витамин/i, icon: 'pills.fill', color: 'coral', category: 'life' },
+  { words: /здоров|health|серд/i, icon: 'heart.fill', color: 'red', category: 'life' },
+  { words: /музык|music|пианино|гитар/i, icon: 'music.note', color: 'magenta', category: 'life' },
+  { words: /подкаст|наушник|podcast/i, icon: 'headphones', color: 'purple', category: 'rest' },
+  { words: /фото|camera|снять/i, icon: 'camera.fill', color: 'cyan', category: 'life' },
+  { words: /фильм|кино|movie/i, icon: 'film.fill', color: 'violet', category: 'rest' },
+  { words: /рисов|paint|draw|дизайн/i, icon: 'paintpalette.fill', color: 'orange', category: 'life' },
+  { words: /игр|game/i, icon: 'gamecontroller.fill', color: 'violet', category: 'rest' },
+  { words: /подар|gift/i, icon: 'gift.fill', color: 'pink', category: 'life' },
+  { words: /празд|birthday|party/i, icon: 'party.popper.fill', color: 'magenta', category: 'life' },
+  { words: /деньг|оплат|bank|pay|финанс/i, icon: 'creditcard.fill', color: 'green', category: 'life' },
+  { words: /самол|flight|полет/i, icon: 'airplane', color: 'blue', category: 'life' },
+  { words: /машин|drive|car/i, icon: 'car.fill', color: 'gray', category: 'life' },
+  { words: /метро|поезд|train|tram/i, icon: 'tram.fill', color: 'orange', category: 'life' },
+  { words: /автобус|bus/i, icon: 'bus.fill', color: 'gold', category: 'life' },
+  { words: /велосип|bike|cycling/i, icon: 'bicycle', color: 'lime', category: 'fitness' },
+  { words: /питом|собак|кошк|pet|dog|cat/i, icon: 'pawprint.fill', color: 'brown', category: 'life' },
+  { words: /сад|plant|дерев|nature/i, icon: 'leaf.fill', color: 'green', category: 'life' },
+];
+
+const categoryIcons: Record<TaskCategory, string> = {
+  focus: 'scope',
+  work: 'desktopcomputer',
+  study: 'book.closed.fill',
+  fitness: 'figure.run',
+  life: 'house.fill',
+  rest: 'moon.zzz.fill',
+};
+
+export function suggestTaskAppearance(title: string, fallbackCategory: TaskCategory = 'work') {
+  const match = rules.find((rule) => rule.words.test(title));
+  const category = match?.category ?? fallbackCategory;
+  return {
+    category,
+    icon: match?.icon ?? categoryIcons[category],
+    color: match?.color ?? categoryTaskColor[category],
+  };
+}

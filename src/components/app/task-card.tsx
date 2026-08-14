@@ -9,6 +9,7 @@ import { AppIcon } from '@/components/app/app-icon';
 import { AppText } from '@/components/app/app-text';
 import { categoryTaskColor, radii, spacing, taskPalettes } from '@/constants/tokens';
 import { useAppTheme } from '@/context/theme-context';
+import { suggestTaskAppearance } from '@/services/task-appearance';
 import type { Task } from '@/types/app';
 
 const categoryIcon: Record<Task['category'], Parameters<typeof AppIcon>[0]['name']> = {
@@ -35,15 +36,16 @@ export function TaskCard({
   onEdit: () => void;
   onMove?: (direction: -1 | 1) => void;
 }) {
-  const { colors, isDark } = useAppTheme();
+  const { colors } = useAppTheme();
   const completed = task.status === 'completed';
   const skipped = task.status === 'skipped';
   const active = task.status === 'active';
   const subtaskCount = task.subtasks?.length ?? 0;
   const completedSubtasks = task.subtasks?.filter((subtask) => subtask.completed).length ?? 0;
-  const taskColor = task.color ?? categoryTaskColor[task.category];
+  const automaticAppearance = suggestTaskAppearance(task.title, task.category);
+  const taskColor = task.color ?? automaticAppearance.color ?? categoryTaskColor[task.category];
   const tone = taskPalettes[taskColor];
-  const symbol = task.icon?.includes('.') ? task.icon as Parameters<typeof AppIcon>[0]['name'] : categoryIcon[task.category];
+  const symbol = (task.icon || automaticAppearance.icon || categoryIcon[task.category]) as Parameters<typeof AppIcon>[0]['name'];
   const translateY = useSharedValue(0);
   const dragging = useSharedValue(false);
   const drag = useMemo(() => Gesture.Pan()
@@ -91,28 +93,28 @@ export function TaskCard({
           padding: spacing.md,
           borderRadius: radii.lg,
           borderCurve: 'continuous',
-          backgroundColor: active ? colors.accentSoft : isDark ? tone.darkSoft : tone.soft,
-          borderWidth: 1,
-          borderColor: active ? colors.accent : `${tone.solid}55`,
+          backgroundColor: active ? colors.accent : tone.solid,
+          borderWidth: 0,
+          boxShadow: `0 10px 26px ${tone.solid}32`,
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm }}>
           <View style={{ flex: 1, gap: 3 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: spacing.xs }}>
-              <AppText variant="caption" style={{ color: tone.solid, fontWeight: '800' }}>
+              <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.82)', fontWeight: '800' }}>
                 {task.allDay ? 'ALL DAY' : task.startTime ? `${task.durationMinutes} MIN` : `ANYTIME · ${task.durationMinutes} MIN`}
               </AppText>
               {task.mustWin ? (
-                <View style={{ backgroundColor: colors.surface, borderRadius: radii.pill, paddingHorizontal: 7, paddingVertical: 3 }}>
-                  <AppText variant="caption" tone="accent" style={{ fontSize: 10 }}>MUST WIN</AppText>
+                <View style={{ backgroundColor: 'rgba(255,255,255,0.22)', borderRadius: radii.pill, paddingHorizontal: 7, paddingVertical: 3 }}>
+                  <AppText variant="caption" style={{ color: '#FFFFFF', fontSize: 10, fontWeight: '900' }}>MUST WIN</AppText>
                 </View>
               ) : null}
             </View>
             <AppText
               variant="body"
-              style={{ fontWeight: task.mustWin ? '800' : '600', textDecorationLine: completed || skipped ? 'line-through' : 'none' }}>
+              style={{ color: '#FFFFFF', fontWeight: task.mustWin ? '800' : '700', textDecorationLine: completed || skipped ? 'line-through' : 'none' }}>
               {task.title}
             </AppText>
-            {task.note ? <AppText variant="caption" tone="secondary" numberOfLines={2}>{task.note}</AppText> : null}
+            {task.note ? <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.78)' }} numberOfLines={2}>{task.note}</AppText> : null}
           </View>
           <Pressable
             accessibilityRole="checkbox"
@@ -121,16 +123,16 @@ export function TaskCard({
               if (process.env.EXPO_OS === 'ios') Haptics.selectionAsync().catch(() => undefined);
               onToggle();
             }}
-            style={{ width: 27, height: 27, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: completed ? tone.solid : colors.surface, borderWidth: 2, borderColor: tone.solid }}>
-            {completed ? <AppIcon name="checkmark" fallback="✓" color="#FFFFFF" size={14} /> : null}
+            style={{ width: 27, height: 27, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: completed ? '#FFFFFF' : 'rgba(255,255,255,0.18)', borderWidth: 2, borderColor: '#FFFFFF' }}>
+            {completed ? <AppIcon name="checkmark" fallback="✓" color={tone.solid} size={14} /> : null}
           </Pressable>
         </View>
-        {subtaskCount ? <AppText variant="caption" tone="secondary">{completedSubtasks}/{subtaskCount} subtasks complete</AppText> : null}
+        {subtaskCount ? <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.78)' }}>{completedSubtasks}/{subtaskCount} subtasks complete</AppText> : null}
         {!completed && !skipped ? (
           <View style={{ flexDirection: 'row', gap: spacing.md, paddingTop: 2 }}>
-            <Pressable onPress={onStart} accessibilityRole="button"><AppText variant="caption" style={{ color: tone.solid, fontWeight: '800' }}>{active ? 'In focus now' : 'Start focus'}</AppText></Pressable>
-            <Pressable onPress={onSkip} accessibilityRole="button"><AppText variant="caption" tone="tertiary">Skip</AppText></Pressable>
-            <Pressable onPress={onEdit} accessibilityRole="button"><AppText variant="caption" tone="tertiary">Edit</AppText></Pressable>
+            <Pressable onPress={onStart} accessibilityRole="button"><AppText variant="caption" style={{ color: '#FFFFFF', fontWeight: '900' }}>{active ? 'In focus now' : 'Start focus'}</AppText></Pressable>
+            <Pressable onPress={onSkip} accessibilityRole="button"><AppText variant="caption" style={{ color: 'rgba(255,255,255,0.76)' }}>Skip</AppText></Pressable>
+            <Pressable onPress={onEdit} accessibilityRole="button"><AppText variant="caption" style={{ color: 'rgba(255,255,255,0.76)' }}>Edit</AppText></Pressable>
           </View>
         ) : null}
       </View>

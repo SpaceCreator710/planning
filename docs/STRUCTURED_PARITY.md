@@ -2,7 +2,7 @@
 
 This is a product implementation audit, not permission to copy another app's artwork, wording or exact screen composition.
 
-| Capability | AI Plan Your Day implementation | Access |
+| Capability | Plan Your Day implementation | Access |
 |---|---|---|
 | Visual timeline | Original connected Day Chain with colored capsules, SF icons and free-time windows | Free |
 | Drag and drop | Long-press vertical reordering with haptics and accessible move controls | Free |

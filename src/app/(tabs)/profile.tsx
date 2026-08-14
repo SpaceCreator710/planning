@@ -1,4 +1,3 @@
-import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import React from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
@@ -45,17 +44,17 @@ export default function ProfileScreen() {
       </View>
 
       <Pressable onPress={() => router.push('/paywall')}>
-        <Card style={{ backgroundColor: `${subscription.accent}16`, borderColor: subscription.accent, flexDirection: 'row', alignItems: 'center' }}>
+        <Card style={{ backgroundColor: subscription.accent, flexDirection: 'row', alignItems: 'center', boxShadow: `0 14px 34px ${subscription.accent}38` }}>
           <View style={{ flex: 1, gap: 3 }}>
-            <AppText variant="caption" style={{ color: subscription.accent }}>
+            <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.74)' }}>
               CURRENT PLAN
             </AppText>
-            <AppText variant="heading">{subscription.name}</AppText>
-            <AppText variant="small" tone="secondary">
+            <AppText variant="heading" style={{ color: '#FFFFFF' }}>{subscription.name}</AppText>
+            <AppText variant="small" style={{ color: 'rgba(255,255,255,0.78)' }}>
               {subscription.tagline}
             </AppText>
           </View>
-          <AppIcon name="chevron.right" fallback="›" color={subscription.accent} size={20} />
+          <AppIcon name="chevron.right" fallback="›" color="#FFFFFF" size={20} />
         </Card>
       </Pressable>
 
@@ -81,7 +80,7 @@ export default function ProfileScreen() {
           PRIVACY & CONTROL
         </AppText>
         <Card style={{ gap: 0, padding: 0, overflow: 'hidden' }}>
-          <MenuRow icon="key.horizontal.fill" title="Protected AI connection" detail="Server key or private personal test key" onPress={() => router.push('/ai-setup')} />
+          <MenuRow icon="lock.shield.fill" title="Protected AI connection" detail="Built-in Groq server · no user key required" onPress={() => router.push('/ai-setup')} />
           <Divider />
           <MenuRow icon="link.badge.plus" title="Connected life" detail="Calendar, Health, Notes and widgets" onPress={() => router.push('/integrations')} />
           <Divider />
@@ -103,7 +102,7 @@ export default function ProfileScreen() {
 
       <AppButton title={mode === 'guest' ? 'Exit guest mode' : 'Sign out'} variant="ghost" onPress={leave} />
       <AppText variant="caption" tone="tertiary" style={{ textAlign: 'center' }}>
-        AI Plan Your Day {Constants.expoConfig?.version ?? '1.0.0'} · You control the plan.
+        Plan Your Day · You control the plan.
       </AppText>
     </ScrollView>
   );
@@ -115,8 +114,8 @@ export default function ProfileScreen() {
 
 function Pill({ label, color }: { label: string; color: string }) {
   return (
-    <View style={{ borderRadius: 999, borderWidth: 1, borderColor: `${color}66`, paddingHorizontal: 10, paddingVertical: 5, backgroundColor: `${color}14` }}>
-      <AppText variant="caption" style={{ color }}>
+    <View style={{ borderRadius: 999, borderWidth: 0, paddingHorizontal: 12, paddingVertical: 6, backgroundColor: color }}>
+      <AppText variant="caption" style={{ color: '#FFFFFF', fontWeight: '800' }}>
         {label}
       </AppText>
     </View>

@@ -9,7 +9,7 @@ interface CardProps extends ViewProps {
   bordered?: boolean;
 }
 
-export function Card({ muted, bordered = true, style, children, ...props }: CardProps) {
+export function Card({ muted, bordered = false, style, children, ...props }: CardProps) {
   const { colors } = useAppTheme();
   return (
     <View
@@ -22,7 +22,7 @@ export function Card({ muted, bordered = true, style, children, ...props }: Card
           borderColor: colors.border,
           padding: spacing.md,
           gap: spacing.sm,
-          boxShadow: shadows.card,
+          boxShadow: bordered ? shadows.card : '0 5px 18px rgba(22,22,25,0.045)',
         },
         style,
       ]}

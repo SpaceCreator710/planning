@@ -105,7 +105,7 @@ interface AppContextValue {
   duplicateTask: (taskId: string) => void;
   duplicateDay: (sourceDate: string, targetDate: string) => boolean;
   moveTask: (taskId: string, direction: -1 | 1) => void;
-  addManualTask: (title: string) => void;
+  addManualTask: (title: string, durationMinutes?: number) => void;
   importCalendarTasks: (tasks: Task[], options?: CalendarImportOptions) => number;
   applyCapacitySignal: (signal?: CapacitySignal, snapshot?: HealthSnapshot) => void;
   setPlannerMode: (mode: PlannerMode) => void;
@@ -753,12 +753,12 @@ export function AppProvider({ children }: React.PropsWithChildren) {
     });
   }, []);
 
-  const addManualTask = useCallback((title: string) => {
+  const addManualTask = useCallback((title: string, durationMinutes = 25) => {
     if (!title.trim()) return;
     setData((current) => {
       const planId = current.activePlanId;
       if (!planId) {
-        const firstTask = createManualTask(title, dateKey());
+        const firstTask = createManualTask(title, dateKey(), durationMinutes);
         const plan = {
           id: `chain-${Date.now()}`,
           date: dateKey(),
@@ -776,7 +776,7 @@ export function AppProvider({ children }: React.PropsWithChildren) {
       const updated = {
         ...current,
         plans: current.plans.map((plan) =>
-          plan.id === planId ? { ...plan, tasks: [...plan.tasks, createManualTask(title, plan.date)] } : plan,
+          plan.id === planId ? { ...plan, tasks: [...plan.tasks, createManualTask(title, plan.date, durationMinutes)] } : plan,
         ),
       };
       return appendEvent(updated, 'task-added', title.trim());

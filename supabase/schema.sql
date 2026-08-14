@@ -1,4 +1,4 @@
--- AI Plan Your Day: minimal secure cloud schema.
+-- Plan Your Day: minimal secure cloud schema.
 -- Run once in the Supabase SQL editor. Client access is protected with RLS.
 
 create extension if not exists pgcrypto;

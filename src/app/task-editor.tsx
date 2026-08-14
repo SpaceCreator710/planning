@@ -13,10 +13,11 @@ import { spacing, taskPalettes } from '@/constants/tokens';
 import { useApp } from '@/context/app-context';
 import { useAppTheme } from '@/context/theme-context';
 import { minutesToTime, timeToMinutes } from '@/lib/date';
+import { suggestTaskAppearance, taskColorChoices, taskIconChoices } from '@/services/task-appearance';
 import type { TaskCategory, TaskColor, TaskRecurrence, TaskSubtask } from '@/types/app';
 
-const taskColors: TaskColor[] = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'violet', 'pink', 'gray'];
-const taskIcons: Parameters<typeof AppIcon>[0]['name'][] = ['scope', 'briefcase.fill', 'book.closed.fill', 'figure.run', 'house.fill', 'moon.zzz.fill', 'heart.fill', 'star.fill', 'checkmark.seal.fill', 'calendar'];
+const taskColors: TaskColor[] = [...taskColorChoices];
+const taskIcons = taskIconChoices;
 
 export default function TaskEditorScreen() {
   const { colors } = useAppTheme();
@@ -36,6 +37,7 @@ export default function TaskEditorScreen() {
   const [reminderMinutesBefore, setReminderMinutesBefore] = useState(task?.reminderMinutesBefore ?? 0);
   const [subtasks, setSubtasks] = useState<TaskSubtask[]>(task?.subtasks ?? []);
   const [subtaskTitle, setSubtaskTitle] = useState('');
+  const automaticAppearance = suggestTaskAppearance(title, category);
 
   if (!task) {
     return (
@@ -74,8 +76,8 @@ export default function TaskEditorScreen() {
       category,
       mustWin,
       recurrence,
-      color,
-      icon: icon || undefined,
+      color: color ?? automaticAppearance.color,
+      icon: icon || automaticAppearance.icon,
       allDay,
       reminderMinutesBefore,
       subtasks,
@@ -114,6 +116,14 @@ export default function TaskEditorScreen() {
           <AppInput value={duration} onChangeText={setDuration} placeholder="25" keyboardType="number-pad" />
         </View>
       </View>
+      <View style={{ gap: spacing.xs }}>
+        <AppText variant="label">Quick duration</AppText>
+        <View style={{ flexDirection: 'row', gap: spacing.xs }}>
+          {[15, 25, 45, 60, 90].map((minutes) => (
+            <Chip key={minutes} label={`${minutes} min`} selected={Number(duration) === minutes} onPress={() => setDuration(String(minutes))} style={{ flex: 1 }} />
+          ))}
+        </View>
+      </View>
       <Card muted style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1 }}>
           <AppText variant="label">All-day task</AppText>
@@ -129,24 +139,42 @@ export default function TaskEditorScreen() {
       </View>
       <View style={{ gap: spacing.sm }}>
         <AppText variant="label">Color</AppText>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs }}>
-          {taskColors.map((item) => <Chip key={item} label={item} color={taskPalettes[item].solid} selected={color === item} onPress={() => setColor(item)} />)}
+        <Pressable onPress={() => { setColor(undefined); setIcon(''); }} style={{ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: spacing.xs, paddingHorizontal: spacing.md, minHeight: 42, borderRadius: 21, backgroundColor: taskPalettes[automaticAppearance.color].solid }}>
+          <AppIcon name={automaticAppearance.icon as Parameters<typeof AppIcon>[0]['name']} fallback="•" color="#FFFFFF" size={18} />
+          <AppText variant="caption" style={{ color: '#FFFFFF', fontWeight: '800' }}>Automatic · {automaticAppearance.color}</AppText>
+        </Pressable>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+          {taskColors.map((item) => {
+            const selected = color === item;
+            return (
+              <Pressable
+                key={item}
+                accessibilityRole="button"
+                accessibilityLabel={`Use ${item} task color`}
+                accessibilityState={{ selected }}
+                onPress={() => setColor(item)}
+                style={({ pressed }) => ({ width: 43, height: 43, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: taskPalettes[item].solid, opacity: pressed ? 0.7 : 1, transform: [{ scale: selected ? 1.08 : 1 }], boxShadow: selected ? `0 7px 18px ${taskPalettes[item].solid}66` : 'none' })}>
+                {selected ? <AppIcon name="checkmark" fallback="✓" color="#FFFFFF" size={17} animated /> : null}
+              </Pressable>
+            );
+          })}
         </View>
         <AppText variant="caption" tone="tertiary">Every palette is free.</AppText>
       </View>
       <View style={{ gap: spacing.sm }}>
         <AppText variant="label">Icon</AppText>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs }}>
-          {taskIcons.map((item) => {
+          {taskIcons.map((item, index) => {
             const selected = icon === item;
+            const iconTone = taskPalettes[taskColorChoices[index % taskColorChoices.length]];
             return (
               <Pressable
                 key={item}
                 accessibilityRole="button"
                 accessibilityState={{ selected }}
                 onPress={() => setIcon(item)}
-                style={({ pressed }) => ({ width: 46, height: 46, borderRadius: 17, borderCurve: 'continuous', alignItems: 'center', justifyContent: 'center', borderWidth: selected ? 2 : 1, borderColor: selected ? colors.accent : colors.border, backgroundColor: selected ? colors.accentSoft : colors.surface, opacity: pressed ? 0.7 : 1 })}>
-                <AppIcon name={item} fallback="•" color={selected ? colors.accent : colors.textSecondary} size={21} animated={selected} />
+                style={({ pressed }) => ({ width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 0, backgroundColor: selected ? colors.accent : iconTone.solid, opacity: pressed ? 0.68 : selected ? 1 : 0.9, transform: [{ scale: selected ? 1.08 : 1 }], boxShadow: selected ? `0 7px 20px ${colors.accent}55` : 'none' })}>
+                <AppIcon name={item} fallback="•" color="#FFFFFF" size={21} animated={selected} />
               </Pressable>
             );
           })}
@@ -155,7 +183,7 @@ export default function TaskEditorScreen() {
       <View style={{ gap: spacing.sm }}>
         <AppText variant="label">Repeat</AppText>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs }}>
-          {(['none', 'daily', 'weekdays', 'weekly', 'biweekly', 'monthly'] as TaskRecurrence[]).map((item) => (
+          {(['none', 'daily', 'weekdays', 'weekly', 'biweekly', 'monthly', 'yearly'] as TaskRecurrence[]).map((item) => (
             <Chip
               key={item}
               label={item}

@@ -1,4 +1,4 @@
-# AI Plan Your Day
+# Plan Your Day
 
 An adaptive visual planner for iOS, Android and Web. It combines a colorful connected timeline, calendar, tasks, habits, notes, health context and an AI coach without copying Structured's screen layout.
 
@@ -10,7 +10,7 @@ An adaptive visual planner for iOS, Android and Web. It combines a colorful conn
 - Built-in Health with manual check-ins, saved history, sleep, steps, activity, standing, distance and workout sessions; iOS can read the user's approved Apple Health summaries.
 - Capacity Twin adapts workload from the user's schedule and optional private wellness summary. Raw HealthKit samples are never sent to AI.
 - Collision Radar protects fixed calendar events and important dates before AI moves unfinished work.
-- AI plans, replans and coaching through OpenRouter using `deepseek/deepseek-v4-flash:free`.
+- AI plans, replans and coaching through the protected Groq server using `openai/gpt-oss-120b`.
 - Soft, Strict and controlled Aggressive coach modes with distinct language. Aggressive mode is direct and provocative, never insulting, threatening or humiliating.
 - Ten accents, six whole-app canvases, colorful task palettes, SF Symbols, rounded controls and spring-based transitions.
 - iOS Next Action widget, notifications, Inbox, goals, habits, focus timer, analytics and day reviews.
@@ -32,7 +32,7 @@ npx expo prebuild --platform ios
 npx expo run:ios
 ```
 
-## Connect DeepSeek through OpenRouter
+## Connect Groq
 
 Production uses one server-held key:
 
@@ -40,12 +40,12 @@ Production uses one server-held key:
 2. In Netlify environment variables set:
 
 ```text
-OPENROUTER_API_KEY=your_secret_key
-OPENROUTER_MODEL=deepseek/deepseek-v4-flash:free
+GROQ_API_KEY=your_secret_key
+GROQ_MODEL=openai/gpt-oss-120b
 ```
 
 3. Redeploy. Web calls `/api/ai`; native builds use `EXPO_PUBLIC_AI_ENDPOINT=https://YOUR_SITE/api/ai`.
 
-For private testing only, open `Me → AI connection` and paste a personal OpenRouter key. Native stores it in the device keychain; web keeps it only for the current browser session. A key must never be written into source code or an `EXPO_PUBLIC_*` variable because both web and mobile bundles are readable by users.
+People using the app never enter an API key. A key must never be written into source code or an `EXPO_PUBLIC_*` variable because both web and mobile bundles are readable by users.
 
 See `docs/PRODUCTION_SETUP.md` for release requirements and `DEPLOY_AI_RU.md` for the short Russian setup.

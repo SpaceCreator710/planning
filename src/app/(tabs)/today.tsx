@@ -19,6 +19,7 @@ import { dateKey, formatFriendlyDate, greetingForHour, minutesToTime, timeToMinu
 import { bodyRhythmForProfile } from '@/services/body-rhythm';
 import { detectScheduleCollisions } from '@/services/capacity-twin';
 import { analyzeReality } from '@/services/reality-engine';
+import { suggestTaskAppearance } from '@/services/task-appearance';
 import type { DaySection, TaskColor } from '@/types/app';
 
 const sectionOrder: DaySection[] = ['morning', 'day', 'evening', 'night'];
@@ -29,6 +30,7 @@ export default function TodayScreen() {
   const plannerMode = activePlan?.mode ?? 'ai-plan';
   const [adding, setAdding] = useState(false);
   const [newTask, setNewTask] = useState('');
+  const [newTaskDuration, setNewTaskDuration] = useState(25);
   const [optimizingChain, setOptimizingChain] = useState(false);
   const [repairingReality, setRepairingReality] = useState(false);
   const language = data.settings.language;
@@ -41,6 +43,7 @@ export default function TodayScreen() {
     return Math.round((complete / activePlan.tasks.length) * 100);
   }, [activePlan]);
   const nextTask = activePlan?.tasks.find((task) => task.status === 'active') ?? activePlan?.tasks.find((task) => task.status === 'pending');
+  const nextTaskTone = nextTask ? taskPalettes[nextTask.color ?? suggestTaskAppearance(nextTask.title, nextTask.category).color] : undefined;
   const completedCount = activePlan?.tasks.filter((task) => task.status === 'completed').length ?? 0;
   const reality = useMemo(() => analyzeReality(activePlan), [activePlan]);
   const collisions = useMemo(() => detectScheduleCollisions(activePlan, capacitySignal), [activePlan, capacitySignal]);
@@ -85,7 +88,7 @@ export default function TodayScreen() {
 
   function addTask() {
     if (!newTask.trim()) return;
-    addManualTask(newTask);
+    addManualTask(newTask, newTaskDuration);
     setNewTask('');
     setAdding(false);
   }
@@ -113,6 +116,7 @@ export default function TodayScreen() {
     setOptimizingChain(true);
     const result = await buildPlan({
       brainDump: unfinished.map((task) => task.title).join('\n'),
+      plannedTasks: unfinished.map((task) => ({ title: task.title, durationMinutes: task.durationMinutes })),
       mustWin: unfinished.find((task) => task.mustWin)?.title ?? unfinished[0]?.title ?? data.profile.primaryGoal,
       fixedCommitments: data.profile.fixedCommitments,
       energy: activePlan.energy,
@@ -181,8 +185,7 @@ export default function TodayScreen() {
               paddingVertical: spacing.sm,
               borderRadius: 16,
               backgroundColor: day.today ? colors.accent : colors.surface,
-              borderWidth: 1,
-              borderColor: day.today ? colors.accent : colors.border,
+              borderWidth: 0,
               opacity: pressed ? 0.72 : 1,
             })}>
             <AppText variant="caption" style={{ color: day.today ? '#FFFFFF' : colors.textSecondary }}>{day.label}</AppText>
@@ -197,18 +200,19 @@ export default function TodayScreen() {
       <Card
         style={{
           padding: spacing.lg,
-          borderColor: nextTask ? colors.accent : colors.success,
-          backgroundColor: nextTask ? colors.surface : colors.successSoft,
+          borderWidth: 0,
+          backgroundColor: nextTaskTone?.solid ?? colors.success,
+          boxShadow: `0 14px 34px ${(nextTaskTone?.solid ?? colors.success)}36`,
           gap: spacing.md,
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
-          <ProgressRing value={progress} size={78} />
+          <ProgressRing value={progress} size={78} color="#FFFFFF" foreground="#FFFFFF" />
           <View style={{ flex: 1, gap: spacing.xs }}>
-            <AppText variant="caption" tone={nextTask ? 'accent' : 'success'}>
+            <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.78)', fontWeight: '900' }}>
               {t('nextAction').toUpperCase()}
             </AppText>
-            <AppText variant="heading">{nextTask?.title ?? 'Day complete. Close it with a review.'}</AppText>
-            <AppText variant="small" tone="secondary">
+            <AppText variant="heading" style={{ color: '#FFFFFF' }}>{nextTask?.title ?? 'Day complete. Close it with a review.'}</AppText>
+            <AppText variant="small" style={{ color: 'rgba(255,255,255,0.78)' }}>
               {nextTask
                 ? `${nextTask.durationMinutes} min · ${nextTask.mustWin ? 'Your must-win task' : 'One step at a time'}`
                 : `${completedCount} actions completed`}
@@ -268,9 +272,9 @@ export default function TodayScreen() {
       ) : null}
 
       <View style={{ flexDirection: 'row', gap: spacing.xs }}>
-        <QuickAction title={t('buildDay')} detail="AI schedule" onPress={() => router.push('/plan-builder')} />
-        <QuickAction title="Plan changed" detail="2-tap repair" onPress={() => router.push('/rescue')} />
-        <QuickAction title={t('motivate')} detail="Coach me" onPress={motivate} />
+        <QuickAction icon="calendar.badge.plus" color={taskPalettes.blue.solid} title={t('buildDay')} detail="AI schedule" onPress={() => router.push('/plan-builder')} />
+        <QuickAction icon="arrow.triangle.2.circlepath" color={taskPalettes.orange.solid} title="Plan changed" detail="2-tap repair" onPress={() => router.push('/rescue')} />
+        <QuickAction icon="bolt.fill" color={taskPalettes.violet.solid} title={t('motivate')} detail="Coach me" onPress={motivate} />
       </View>
 
       <Card
@@ -361,6 +365,7 @@ export default function TodayScreen() {
             <>
               {activePlan.tasks.map((task, index) => {
                 const tone = taskPalettes[(task.color ?? categoryTaskColor[task.category]) as TaskColor];
+                const appearance = suggestTaskAppearance(task.title, task.category);
                 return (
                 <View key={task.id} style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, position: 'relative' }}>
                   {index < activePlan.tasks.length - 1 ? (
@@ -371,20 +376,21 @@ export default function TodayScreen() {
                       ? <AppIcon name="checkmark" fallback="✓" color="#FFFFFF" size={14} />
                       : <AppText variant="caption" style={{ color: '#FFFFFF', fontWeight: '900' }}>{String(index + 1)}</AppText>}
                   </View>
-                  <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm, padding: spacing.md, borderRadius: 18, borderCurve: 'continuous', backgroundColor: `${tone.solid}18`, borderWidth: 1, borderColor: `${tone.solid}66` }}>
+                  <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm, padding: spacing.md, borderRadius: 24, borderCurve: 'continuous', backgroundColor: tone.solid, boxShadow: `0 8px 22px ${tone.solid}30` }}>
+                    <AppIcon name={(task.icon || appearance.icon) as Parameters<typeof AppIcon>[0]['name']} fallback="•" color="#FFFFFF" size={20} />
                     <Pressable onPress={() => toggleTask(task.id)} style={{ flex: 1 }}>
-                      <AppText variant="caption" style={{ color: tone.solid, fontWeight: '800' }}>{task.startTime || 'ANYTIME'} · {task.durationMinutes} MIN</AppText>
-                      <AppText style={{ textDecorationLine: task.status === 'completed' ? 'line-through' : 'none' }}>{task.title}</AppText>
+                      <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.78)', fontWeight: '800' }}>{task.startTime || 'ANYTIME'} · {task.durationMinutes} MIN</AppText>
+                      <AppText style={{ color: '#FFFFFF', fontWeight: '700', textDecorationLine: task.status === 'completed' ? 'line-through' : 'none' }}>{task.title}</AppText>
                     </Pressable>
                     <Pressable onPress={() => router.push({ pathname: '/task-editor', params: { id: task.id } })}>
-                      <AppIcon name="ellipsis.circle" fallback="…" color={tone.solid} size={20} />
+                      <AppIcon name="ellipsis.circle" fallback="…" color="#FFFFFF" size={20} />
                     </Pressable>
                   </View>
                 </View>
               );})}
               <Card muted style={{ marginLeft: 42 }}>
                 <AppText variant="label">AI has the whole chain</AppText>
-                <AppText variant="small" tone="secondary">It will reorder every item, estimate effort, add useful buffers and keep your main result first.</AppText>
+                <AppText variant="small" tone="secondary">It can reorder unfinished items while keeping every duration you selected. It will not add random break tasks.</AppText>
                 <AppButton title="Optimize this chain" loading={optimizingChain} onPress={optimizeChain} />
               </Card>
             </>
@@ -406,8 +412,26 @@ export default function TodayScreen() {
       </View>
 
       {adding ? (
-        <Card>
+        <Card style={{ borderRadius: 30 }}>
           <AppInput value={newTask} onChangeText={setNewTask} placeholder="What needs doing?" autoFocus returnKeyType="done" onSubmitEditing={addTask} />
+          {newTask.trim() ? (() => {
+            const appearance = suggestTaskAppearance(newTask);
+            const tone = taskPalettes[appearance.color];
+            return (
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, padding: spacing.sm, borderRadius: 24, backgroundColor: tone.solid }}>
+                <View style={{ width: 38, height: 38, borderRadius: 19, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' }}>
+                  <AppIcon name={appearance.icon as Parameters<typeof AppIcon>[0]['name']} fallback="•" color="#FFFFFF" size={19} />
+                </View>
+                <AppText style={{ flex: 1, color: '#FFFFFF', fontWeight: '800' }}>{newTask.trim()}</AppText>
+                <AppText variant="label" style={{ color: '#FFFFFF' }}>{newTaskDuration}m</AppText>
+              </View>
+            );
+          })() : null}
+          <View style={{ flexDirection: 'row', gap: spacing.xs }}>
+            {[15, 25, 45, 60, 90].map((minutes) => (
+              <Chip key={minutes} label={`${minutes}`} selected={newTaskDuration === minutes} onPress={() => setNewTaskDuration(minutes)} style={{ flex: 1 }} />
+            ))}
+          </View>
           <View style={{ flexDirection: 'row', gap: spacing.sm }}>
             <AppButton title="Cancel" variant="secondary" compact onPress={() => setAdding(false)} style={{ flex: 1 }} />
             <AppButton title="Add to today" compact onPress={addTask} style={{ flex: 2 }} />
@@ -442,30 +466,31 @@ export default function TodayScreen() {
   );
 }
 
-function QuickAction({ title, detail, onPress }: { title: string; detail: string; onPress: () => void }) {
-  const { colors } = useAppTheme();
+function QuickAction({ icon, color, title, detail, onPress }: { icon: Parameters<typeof AppIcon>[0]['name']; color: string; title: string; detail: string; onPress: () => void }) {
   return (
     <Pressable
       accessibilityRole="button"
       onPress={onPress}
       style={({ pressed }) => ({
         flex: 1,
-        minHeight: 86,
+        minHeight: 104,
         padding: spacing.sm,
-        borderRadius: 18,
+        borderRadius: 25,
         borderCurve: 'continuous',
-        borderWidth: 1,
-        borderColor: colors.border,
-        backgroundColor: colors.surface,
+        borderWidth: 0,
+        backgroundColor: color,
         alignItems: 'center',
         justifyContent: 'center',
         gap: spacing.xs,
         opacity: pressed ? 0.7 : 1,
       })}>
-      <AppText variant="caption" style={{ textAlign: 'center', fontWeight: '800' }}>
+      <View style={{ width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.22)' }}>
+        <AppIcon name={icon} fallback="•" color="#FFFFFF" size={17} />
+      </View>
+      <AppText variant="caption" style={{ color: '#FFFFFF', textAlign: 'center', fontWeight: '900' }}>
         {title}
       </AppText>
-      <AppText variant="caption" tone="tertiary" style={{ textAlign: 'center' }}>{detail}</AppText>
+      <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.76)', textAlign: 'center' }}>{detail}</AppText>
     </Pressable>
   );
 }

@@ -1,17 +1,19 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Alert, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import { AppButton } from '@/components/app/app-button';
+import { AppIcon } from '@/components/app/app-icon';
 import { AppInput } from '@/components/app/app-input';
 import { AppText } from '@/components/app/app-text';
 import { Card } from '@/components/app/card';
 import { Chip } from '@/components/app/chip';
 import { ProgressRing } from '@/components/app/progress-ring';
-import { spacing } from '@/constants/tokens';
+import { spacing, taskPalettes } from '@/constants/tokens';
 import { useApp } from '@/context/app-context';
 import { useAppTheme } from '@/context/theme-context';
 import { schedulePlanReminders } from '@/services/notifications';
+import { suggestTaskAppearance } from '@/services/task-appearance';
 import type { DayPlan, EnergyLevel, PlanStyle } from '@/types/app';
 
 export default function PlanBuilderScreen() {
@@ -24,6 +26,13 @@ export default function PlanBuilderScreen() {
   const [style, setStyle] = useState<PlanStyle>('realistic');
   const [result, setResult] = useState<DayPlan>();
   const [building, setBuilding] = useState(false);
+  const [durations, setDurations] = useState<Record<string, number>>({});
+  const taskTitles = useMemo(() => brainDump
+    .split(/\n|;/)
+    .map((item) => item.replace(/^[-•\d.)\s]+/, '').trim())
+    .filter((item) => item.length > 1)
+    .slice(0, 14), [brainDump]);
+  const plannedTasks = taskTitles.map((title) => ({ title, durationMinutes: durations[title] ?? 25 }));
 
   async function generate() {
     if (!brainDump.trim() && !mustWin.trim()) {
@@ -31,7 +40,7 @@ export default function PlanBuilderScreen() {
       return;
     }
     setBuilding(true);
-    const next = await buildPlan({ brainDump, mustWin, fixedCommitments: fixed, energy, style });
+    const next = await buildPlan({ brainDump, plannedTasks, mustWin, fixedCommitments: fixed, energy, style });
     setBuilding(false);
     if (!next.ok) {
       if (next.reason === 'limit') {
@@ -71,7 +80,7 @@ export default function PlanBuilderScreen() {
             {result.planScore >= 80 ? 'This plan leaves room for real life.' : 'This plan is ambitious. Protect the first two actions.'}
           </AppText>
           <AppText variant="small" tone="secondary">
-            Breaks and transition buffers are already included. If the day slips, Rescue My Day will protect the main result.
+            Your chosen task durations are protected. AI only arranges the order and start times around real commitments.
           </AppText>
         </Card>
         <View style={{ gap: spacing.sm }}>
@@ -103,6 +112,43 @@ export default function PlanBuilderScreen() {
           <AppText variant="title">Drop the mental load</AppText>
           <AppText tone="secondary">Write everything. The planner will cut, order, time-box and add breathing room.</AppText>
         </View>
+
+        {taskTitles.length ? (
+          <View style={{ gap: spacing.sm }}>
+            <View style={{ gap: 3 }}>
+              <AppText variant="label">Choose time for every task</AppText>
+              <AppText variant="caption" tone="secondary">AI keeps these durations exactly and chooses a matching icon and color.</AppText>
+            </View>
+            {taskTitles.map((title) => {
+              const appearance = suggestTaskAppearance(title);
+              const tone = taskPalettes[appearance.color];
+              const selectedDuration = durations[title] ?? 25;
+              return (
+                <View key={title} style={{ padding: spacing.sm, gap: spacing.sm, borderRadius: 26, borderCurve: 'continuous', backgroundColor: tone.solid }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                    <View style={{ width: 42, height: 42, borderRadius: 21, backgroundColor: 'rgba(255,255,255,0.22)', alignItems: 'center', justifyContent: 'center' }}>
+                      <AppIcon name={appearance.icon as Parameters<typeof AppIcon>[0]['name']} fallback="•" color="#FFFFFF" size={21} />
+                    </View>
+                    <AppText style={{ flex: 1, color: '#FFFFFF', fontWeight: '800' }}>{title}</AppText>
+                    <AppText variant="label" style={{ color: '#FFFFFF', fontVariant: ['tabular-nums'] }}>{selectedDuration}m</AppText>
+                  </View>
+                  <View style={{ flexDirection: 'row', gap: 6 }}>
+                    {[15, 25, 45, 60, 90].map((minutes) => (
+                      <Chip
+                        key={minutes}
+                        label={`${minutes}`}
+                        selected={selectedDuration === minutes}
+                        color="#FFFFFF"
+                        onPress={() => setDurations((current) => ({ ...current, [title]: minutes }))}
+                        style={{ flex: 1, minHeight: 34, backgroundColor: selectedDuration === minutes ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.12)', borderColor: 'rgba(255,255,255,0.34)' }}
+                      />
+                    ))}
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        ) : null}
 
         <View style={{ gap: spacing.xs }}>
           <AppText variant="label">Brain dump</AppText>

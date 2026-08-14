@@ -2,6 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 
+import { AppIcon } from '@/components/app/app-icon';
 import { AppText } from '@/components/app/app-text';
 import { Card } from '@/components/app/card';
 import { Chip } from '@/components/app/chip';
@@ -9,6 +10,7 @@ import { categoryTaskColor, radii, spacing, taskPalettes } from '@/constants/tok
 import { useApp } from '@/context/app-context';
 import { useAppTheme } from '@/context/theme-context';
 import { dateKey, formatFriendlyDate } from '@/lib/date';
+import { suggestTaskAppearance } from '@/services/task-appearance';
 import type { DayPlan, Task } from '@/types/app';
 
 type CalendarMode = 'day' | 'week' | 'month';
@@ -81,12 +83,14 @@ export default function CalendarViewScreen() {
           {selectedPlan?.tasks.length ? selectedPlan.tasks.map((task) => {
             const tone = taskTone(task, isDark);
             return (
-              <Card key={task.id} style={{ flexDirection: 'row', alignItems: 'center', borderColor: `${tone.solid}55`, backgroundColor: tone.soft }}>
-                <View style={{ width: 56 }}><AppText variant="caption" tone="secondary">{task.allDay ? 'All day' : task.startTime ?? 'Any'}</AppText></View>
-                <View style={{ width: 10, height: 46, borderRadius: 6, backgroundColor: tone.solid }} />
+              <Card key={task.id} bordered={false} style={{ flexDirection: 'row', alignItems: 'center', borderRadius: 26, backgroundColor: tone.solid }}>
+                <View style={{ width: 56 }}><AppText variant="caption" style={{ color: 'rgba(255,255,255,0.80)' }}>{task.allDay ? 'All day' : task.startTime ?? 'Any'}</AppText></View>
+                <View style={{ width: 42, height: 42, borderRadius: 21, backgroundColor: 'rgba(255,255,255,0.20)', alignItems: 'center', justifyContent: 'center' }}>
+                  <AppIcon name={(task.icon || suggestTaskAppearance(task.title, task.category).icon) as Parameters<typeof AppIcon>[0]['name']} fallback="•" color="#FFFFFF" size={20} />
+                </View>
                 <View style={{ flex: 1 }}>
-                  <AppText variant="label" style={{ textDecorationLine: task.status === 'completed' ? 'line-through' : 'none' }}>{task.title}</AppText>
-                  <AppText variant="caption" tone="secondary">{task.durationMinutes} min · {task.category}</AppText>
+                  <AppText variant="label" style={{ color: '#FFFFFF', textDecorationLine: task.status === 'completed' ? 'line-through' : 'none' }}>{task.title}</AppText>
+                  <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.78)' }}>{task.durationMinutes} min · {task.category}</AppText>
                 </View>
               </Card>
             );

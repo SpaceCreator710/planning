@@ -49,7 +49,7 @@ export default function WelcomeScreen() {
           <BrandMark size={72} />
           <View style={{ alignItems: 'center', gap: spacing.xs }}>
             <AppText variant="title" style={{ textAlign: 'center' }}>
-              AI Plan Your Day
+              Plan Your Day
             </AppText>
             <AppText tone="secondary" style={{ textAlign: 'center', maxWidth: 420 }}>
               A coach that plans the day, catches the slip, and gets you moving again.

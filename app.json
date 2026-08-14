@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "AI Plan Your Day",
-    "slug": "ai-plan-your-day",
-    "version": "6.0.0",
-    "description": "A personal AI accountability coach that plans, rescues, and learns from your day.",
+    "name": "Plan Your Day",
+    "slug": "plan-your-day",
+    "version": "1.0.0",
+    "description": "A visual day planner with a personal AI action coach.",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "aiplanyourday",
@@ -20,9 +20,9 @@
         ]
       },
       "infoPlist": {
-        "NSHealthShareUsageDescription": "AI Plan Your Day reads the health summaries you choose so Capacity Twin can suggest a realistic workload. It does not diagnose conditions.",
-        "NSCalendarsFullAccessUsageDescription": "AI Plan Your Day imports events you choose so important dates and fixed commitments stay protected in your plan.",
-        "NSRemindersFullAccessUsageDescription": "AI Plan Your Day imports reminders you choose into your task chain."
+        "NSHealthShareUsageDescription": "Plan Your Day reads the health summaries you choose so it can suggest a realistic workload. It does not diagnose conditions.",
+        "NSCalendarsFullAccessUsageDescription": "Plan Your Day imports events you choose so important dates and fixed commitments stay protected in your plan.",
+        "NSRemindersFullAccessUsageDescription": "Plan Your Day imports reminders you choose into your task chain."
       }
     },
     "android": {
@@ -47,8 +47,8 @@
       [
         "expo-calendar",
         {
-          "calendarPermission": "Allow AI Plan Your Day to read your selected calendar events and protect important dates in your plan.",
-          "remindersPermission": "Allow AI Plan Your Day to import selected Apple Reminders into your task chain."
+          "calendarPermission": "Allow Plan Your Day to read your selected calendar events and protect important dates in your plan.",
+          "remindersPermission": "Allow Plan Your Day to import selected Apple Reminders into your task chain."
         }
       ],
       [

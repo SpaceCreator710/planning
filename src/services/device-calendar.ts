@@ -171,7 +171,7 @@ function calendarDetails(plan: DayPlan, task: Task) {
     : new Date(start.getTime() + Math.max(5, task.durationMinutes) * 60_000);
   return {
     title: task.title,
-    notes: task.note || 'Planned with AI Plan Your Day',
+    notes: task.note || 'Planned with Plan Your Day',
     startDate: start,
     endDate: end,
     allDay: Boolean(task.allDay),

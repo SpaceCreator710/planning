@@ -14,16 +14,25 @@ export const palette = {
 };
 
 export const taskPalettes = {
-  red: { solid: '#E3342F', soft: '#FDEBEA', darkSoft: '#3B1B1A' },
-  orange: { solid: '#E87528', soft: '#FFF0E5', darkSoft: '#3A2418' },
-  yellow: { solid: '#C99112', soft: '#FFF6D8', darkSoft: '#382E12' },
-  green: { solid: '#278B61', soft: '#E7F7F0', darkSoft: '#143428' },
-  teal: { solid: '#16878B', soft: '#E2F6F5', darkSoft: '#123336' },
-  blue: { solid: '#367BF5', soft: '#EAF1FF', darkSoft: '#17284B' },
-  indigo: { solid: '#5260C9', soft: '#ECEEFE', darkSoft: '#202544' },
-  violet: { solid: '#8B57C7', soft: '#F4EBFC', darkSoft: '#30203F' },
-  pink: { solid: '#D04F83', soft: '#FCEAF2', darkSoft: '#3C1D2C' },
-  gray: { solid: '#74747C', soft: '#EFEFF1', darkSoft: '#29292E' },
+  red: { solid: '#FF4D4F', soft: '#FFE8E8', darkSoft: '#451B1D' },
+  coral: { solid: '#FF6B5F', soft: '#FFEAE7', darkSoft: '#48201D' },
+  orange: { solid: '#FF861F', soft: '#FFF0E3', darkSoft: '#472716' },
+  gold: { solid: '#F3A712', soft: '#FFF2CE', darkSoft: '#46320C' },
+  yellow: { solid: '#F5C400', soft: '#FFF7C7', darkSoft: '#453B08' },
+  lime: { solid: '#84C83D', soft: '#EDF8DF', darkSoft: '#293D14' },
+  green: { solid: '#34B56F', soft: '#E3F8EB', darkSoft: '#133B27' },
+  mint: { solid: '#22BFA0', soft: '#DDF9F1', darkSoft: '#103C33' },
+  teal: { solid: '#00AAA8', soft: '#DDF8F6', darkSoft: '#103B3B' },
+  cyan: { solid: '#16A8E0', soft: '#E0F5FC', darkSoft: '#11384A' },
+  blue: { solid: '#3478F6', soft: '#E6EFFF', darkSoft: '#172B50' },
+  navy: { solid: '#3E5F9B', soft: '#E7EDF7', darkSoft: '#192943' },
+  indigo: { solid: '#5856D6', soft: '#ECEBFF', darkSoft: '#24234D' },
+  violet: { solid: '#9356E8', soft: '#F3E7FF', darkSoft: '#342047' },
+  purple: { solid: '#C14FCD', soft: '#F8E5FB', darkSoft: '#412047' },
+  pink: { solid: '#F04F8B', soft: '#FFE6F0', darkSoft: '#451D2F' },
+  magenta: { solid: '#E23B91', soft: '#FCE3F0', darkSoft: '#47162F' },
+  brown: { solid: '#A36A45', soft: '#F4E9E1', darkSoft: '#38251A' },
+  gray: { solid: '#77777D', soft: '#EEEEF0', darkSoft: '#29292E' },
 } as const;
 
 export const categoryTaskColor = {
@@ -49,23 +58,23 @@ export const accentThemes = {
 } as const;
 
 export const canvasThemes = {
-  paper: { light: '#F7F7F8', dark: '#0E0E10', swatch: '#74747C' },
-  blush: { light: '#FFF5F6', dark: '#1C1417', swatch: '#E76582' },
-  mist: { light: '#F2F7FA', dark: '#11191E', swatch: '#3D91C8' },
-  sage: { light: '#F3F8F4', dark: '#121A15', swatch: '#4B9270' },
-  lavender: { light: '#F7F4FC', dark: '#18141F', swatch: '#9272D4' },
-  midnight: { light: '#EEF1F8', dark: '#090D17', swatch: '#34466F' },
+  paper: { light: '#F4F4F7', surface: '#FFFFFF', muted: '#EAEAEE', dark: '#0E0E10', darkSurface: '#19191C', darkMuted: '#25252A', swatch: '#74747C' },
+  blush: { light: '#FFF0F4', surface: '#FFF9FB', muted: '#F8DFE8', dark: '#211319', darkSurface: '#2C1A21', darkMuted: '#3A222C', swatch: '#F04F8B' },
+  mist: { light: '#EAF7FF', surface: '#F8FCFF', muted: '#D8ECF8', dark: '#0F1B23', darkSurface: '#162731', darkMuted: '#1D3542', swatch: '#16A8E0' },
+  sage: { light: '#EAF8EF', surface: '#F8FDF9', muted: '#D7EDDE', dark: '#101E16', darkSurface: '#172A1F', darkMuted: '#20382A', swatch: '#34B56F' },
+  lavender: { light: '#F2ECFF', surface: '#FBF9FF', muted: '#E6DBF7', dark: '#1B1326', darkSurface: '#281C36', darkMuted: '#352548', swatch: '#9356E8' },
+  midnight: { light: '#E8EEFA', surface: '#F6F8FD', muted: '#D8E0F0', dark: '#080D19', darkSurface: '#111A2B', darkMuted: '#1A2740', swatch: '#3E5F9B' },
 } as const;
 
 export const lightColors = {
-  background: '#F7F7F8',
+  background: '#F4F4F7',
   surface: '#FFFFFF',
   surfaceElevated: '#FFFFFF',
-  surfaceMuted: '#F0F0F2',
+  surfaceMuted: '#ECECF0',
   text: '#171719',
   textSecondary: '#68686F',
   textTertiary: '#95959C',
-  border: '#E5E5E8',
+  border: '#DEDEE3',
   divider: '#ECECEF',
   accent: palette.red,
   accentPressed: palette.redDark,
@@ -76,7 +85,7 @@ export const lightColors = {
   warningSoft: palette.amberSoft,
   info: palette.blue,
   infoSoft: palette.blueSoft,
-  tabBar: 'rgba(255,255,255,0.96)',
+  tabBar: 'rgba(247,247,250,0.88)',
   overlay: 'rgba(10,10,12,0.45)',
 };
 
@@ -117,7 +126,16 @@ export function colorsForAccent(base: AppColors, accentTheme: keyof typeof accen
 
 export function colorsForCanvas(base: AppColors, canvasTheme: keyof typeof canvasThemes, isDark: boolean): AppColors {
   const canvas = canvasThemes[canvasTheme] ?? canvasThemes.paper;
-  return { ...base, background: isDark ? canvas.dark : canvas.light };
+  const surface = isDark ? canvas.darkSurface : canvas.surface;
+  const surfaceMuted = isDark ? canvas.darkMuted : canvas.muted;
+  return {
+    ...base,
+    background: isDark ? canvas.dark : canvas.light,
+    surface,
+    surfaceElevated: surface,
+    surfaceMuted,
+    tabBar: isDark ? `${canvas.darkSurface}EE` : `${canvas.surface}E8`,
+  };
 }
 
 export const spacing = {
@@ -132,14 +150,14 @@ export const spacing = {
 };
 
 export const radii = {
-  sm: 10,
-  md: 16,
-  lg: 22,
-  xl: 28,
+  sm: 12,
+  md: 18,
+  lg: 26,
+  xl: 34,
   pill: 999,
 };
 
 export const shadows = {
-  card: '0 8px 30px rgba(22, 22, 25, 0.06)',
-  floating: '0 12px 40px rgba(22, 22, 25, 0.14)',
+  card: '0 7px 24px rgba(22, 22, 25, 0.055)',
+  floating: '0 14px 44px rgba(22, 22, 25, 0.16)',
 };

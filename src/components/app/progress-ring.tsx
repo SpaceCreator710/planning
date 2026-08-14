@@ -5,7 +5,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { AppText } from '@/components/app/app-text';
 import { useAppTheme } from '@/context/theme-context';
 
-export function ProgressRing({ value, size = 76, stroke = 8 }: { value: number; size?: number; stroke?: number }) {
+export function ProgressRing({ value, size = 76, stroke = 8, color, foreground }: { value: number; size?: number; stroke?: number; color?: string; foreground?: string }) {
   const { colors } = useAppTheme();
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -13,12 +13,12 @@ export function ProgressRing({ value, size = 76, stroke = 8 }: { value: number; 
   return (
     <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
       <Svg width={size} height={size} style={{ position: 'absolute', transform: [{ rotate: '-90deg' }] }}>
-        <Circle cx={size / 2} cy={size / 2} r={radius} stroke={colors.surfaceMuted} strokeWidth={stroke} fill="none" />
+        <Circle cx={size / 2} cy={size / 2} r={radius} stroke={foreground ? 'rgba(255,255,255,0.24)' : colors.surfaceMuted} strokeWidth={stroke} fill="none" />
         <Circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={colors.accent}
+          stroke={color ?? colors.accent}
           strokeWidth={stroke}
           strokeLinecap="round"
           fill="none"
@@ -26,7 +26,7 @@ export function ProgressRing({ value, size = 76, stroke = 8 }: { value: number; 
           strokeDashoffset={circumference - (normalized / 100) * circumference}
         />
       </Svg>
-      <AppText variant="heading" style={{ fontVariant: ['tabular-nums'], fontSize: size * 0.25 }}>
+      <AppText variant="heading" style={{ color: foreground ?? colors.text, fontVariant: ['tabular-nums'], fontSize: size * 0.25 }}>
         {Math.round(normalized)}%
       </AppText>
     </View>

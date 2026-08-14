@@ -1,4 +1,4 @@
-# AI Plan Your Day — Product specification
+# Plan Your Day — Product specification
 
 ## Promise
 

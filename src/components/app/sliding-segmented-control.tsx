@@ -44,7 +44,7 @@ export function SlidingSegmentedControl<T extends string>({
       {width > 0 ? (
         <Animated.View
           pointerEvents="none"
-          style={[{ position: 'absolute', left: 4, top: 4, bottom: 4, borderRadius: radii.pill, backgroundColor: colors.surface, boxShadow: '0 3px 12px rgba(0,0,0,0.10)' }, indicatorStyle]}
+          style={[{ position: 'absolute', left: 4, top: 4, bottom: 4, borderRadius: radii.pill, backgroundColor: colors.accent, boxShadow: '0 5px 18px rgba(0,0,0,0.14)' }, indicatorStyle]}
         />
       ) : null}
       {options.map((option) => {
@@ -59,7 +59,7 @@ export function SlidingSegmentedControl<T extends string>({
               onChange(option.value);
             }}
             style={{ flex: 1, minHeight: 40, paddingHorizontal: spacing.xs, alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
-            <AppText variant="caption" style={{ color: selected ? colors.accent : colors.textSecondary, fontWeight: selected ? '800' : '600' }}>
+            <AppText variant="caption" style={{ color: selected ? '#FFFFFF' : colors.textSecondary, fontWeight: selected ? '800' : '600' }}>
               {option.label}
             </AppText>
           </Pressable>

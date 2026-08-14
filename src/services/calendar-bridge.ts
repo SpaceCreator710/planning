@@ -57,11 +57,13 @@ export function parseIcsTasks(content: string): Task[] {
     const recurrenceRule = valueFor(block, 'RRULE').toUpperCase();
     const recurrence = recurrenceRule.includes('FREQ=DAILY')
       ? ('daily' as const)
-      : recurrenceRule.includes('FREQ=MONTHLY')
-        ? ('monthly' as const)
-        : recurrenceRule.includes('FREQ=WEEKLY')
-          ? (recurrenceRule.includes('INTERVAL=2') ? ('biweekly' as const) : ('weekly' as const))
-          : ('none' as const);
+      : recurrenceRule.includes('FREQ=YEARLY')
+        ? ('yearly' as const)
+        : recurrenceRule.includes('FREQ=MONTHLY')
+          ? ('monthly' as const)
+          : recurrenceRule.includes('FREQ=WEEKLY')
+            ? (recurrenceRule.includes('INTERVAL=2') ? ('biweekly' as const) : ('weekly' as const))
+            : ('none' as const);
     return [{
       id: `task-calendar-${now}-${index}`,
       title,
@@ -120,7 +122,7 @@ export function buildPlanIcs(plan: DayPlan) {
       'END:VEVENT',
     ].filter(Boolean).join('\r\n');
   }).join('\r\n');
-  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//AI Plan Your Day//Flow Calendar//EN', 'CALSCALE:GREGORIAN', events, 'END:VCALENDAR'].join('\r\n');
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Plan Your Day//Flow Calendar//EN', 'CALSCALE:GREGORIAN', events, 'END:VCALENDAR'].join('\r\n');
 }
 
 export async function exportPlanToCalendar(plan: DayPlan) {

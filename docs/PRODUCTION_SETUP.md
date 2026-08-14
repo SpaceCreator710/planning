@@ -1,12 +1,12 @@
 # Production setup
 
-## 1. OpenRouter AI
+## 1. Groq AI
 
 The release path is a protected Netlify function. Set these server-only variables:
 
 ```text
-OPENROUTER_API_KEY=your_secret_key
-OPENROUTER_MODEL=deepseek/deepseek-v4-flash:free
+GROQ_API_KEY=your_secret_key
+GROQ_MODEL=openai/gpt-oss-120b
 ```
 
 Deploy the whole repository so Netlify builds both `dist` and `netlify/functions/ai.mjs`. A drag-and-drop upload of static `dist` cannot run a secret-backed function.
@@ -17,9 +17,9 @@ Web automatically calls `/api/ai`. Native builds set only the non-secret endpoin
 EXPO_PUBLIC_AI_ENDPOINT=https://YOUR_SITE.netlify.app/api/ai
 ```
 
-The personal-key screen is a private testing fallback. It is not the production architecture and the app never saves that key in synced state.
+People using the app never enter an AI key. The only AI credential is the server-only Groq key.
 
-Before public launch, add authenticated per-account quotas, an OpenRouter spending limit, origin restrictions and monitoring. Model availability on a free route is not guaranteed, so production should also support a paid fallback model.
+Before public launch, add authenticated per-account quotas, a Groq spending limit, origin restrictions and monitoring. Model availability and free allowance are not guaranteed, so production should also define a funded fallback plan.
 
 ## 2. Apple integrations
 

@@ -14,10 +14,9 @@ export function AppInput({ style, multiline, ...props }: TextInputProps) {
         {
           minHeight: multiline ? 112 : 52,
           backgroundColor: colors.surface,
-          borderWidth: 1,
-          borderColor: colors.border,
+          borderWidth: 0,
           color: colors.text,
-          borderRadius: radii.md,
+          borderRadius: multiline ? radii.lg : radii.pill,
           borderCurve: 'continuous',
           paddingHorizontal: spacing.md,
           paddingVertical: spacing.sm,

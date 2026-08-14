@@ -222,8 +222,8 @@ export default function SettingsScreen() {
           </View>
           <Chip label={checkingAI ? 'CHECKING' : aiConnection.status === 'online' ? 'READY' : 'RETRY'} selected={aiConnection.status === 'online'} onPress={() => void testAI()} />
         </View>
-        <AppText variant="caption" tone="tertiary">Production uses one private server key. A personal test key can be stored in the device Keychain—or only for this browser session—without writing it into the app bundle.</AppText>
-        <AppButton title="AI connection & personal test key" variant="secondary" onPress={() => router.push('/ai-setup')} />
+        <AppText variant="caption" tone="tertiary">Production uses one private Groq key inside the protected server function. People using the app never enter or see that key.</AppText>
+        <AppButton title="Check protected Groq connection" variant="secondary" onPress={() => router.push('/ai-setup')} />
         <SettingToggle
           title="Learn useful facts"
           detail="Propose memory from goals, routines and behavior"

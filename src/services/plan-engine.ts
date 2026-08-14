@@ -1,4 +1,5 @@
 import { dateKey, minutesToTime, timeToMinutes } from '@/lib/date';
+import { suggestTaskAppearance } from '@/services/task-appearance';
 import type {
   DayPlan,
   DaySection,
@@ -58,6 +59,7 @@ function makeTask(
   mustWin: boolean,
   source: Task['source'] = 'ai',
 ): Task {
+  const appearance = suggestTaskAppearance(title, categoryForTitle(title));
   return {
     id: id('task'),
     title,
@@ -65,7 +67,9 @@ function makeTask(
     endTime: minutesToTime(startMinute + duration),
     durationMinutes: duration,
     section: sectionForMinute(startMinute),
-    category: categoryForTitle(title),
+    category: appearance.category,
+    color: appearance.color,
+    icon: appearance.icon,
     status: 'pending',
     priority: mustWin ? 1 : index < 3 ? 2 : 3,
     mustWin,
@@ -75,7 +79,8 @@ function makeTask(
 }
 
 export function buildDayPlan(input: PlanBuildInput, profile: UserProfile): DayPlan {
-  const rawTasks = parseBrainDump(input.brainDump);
+  const requestedDurations = new Map((input.plannedTasks ?? []).map((task) => [task.title.trim().toLocaleLowerCase(), Math.max(5, Math.min(480, task.durationMinutes))]));
+  const rawTasks = input.plannedTasks?.length ? input.plannedTasks.map((task) => task.title.trim()).filter(Boolean) : parseBrainDump(input.brainDump);
   const mustWin = input.mustWin.trim() || rawTasks[0] || profile.primaryGoal || 'Move the main goal forward';
   const tasks = [mustWin, ...rawTasks.filter((task) => task.toLowerCase() !== mustWin.toLowerCase())];
 
@@ -88,23 +93,15 @@ export function buildDayPlan(input: PlanBuildInput, profile: UserProfile): DayPl
 
   const builtTasks: Task[] = [];
   selected.forEach((title, index) => {
-    let duration = durationForTitle(title, input.energy);
-    if (input.style === 'minimum') duration = Math.min(duration, index === 0 ? 30 : 20);
-    if (input.style === 'realistic') duration = Math.min(duration, 50);
+    let duration = requestedDurations.get(title.toLocaleLowerCase()) ?? durationForTitle(title, input.energy);
+    if (!requestedDurations.has(title.toLocaleLowerCase()) && input.style === 'minimum') duration = Math.min(duration, index === 0 ? 30 : 20);
+    if (!requestedDurations.has(title.toLocaleLowerCase()) && input.style === 'realistic') duration = Math.min(duration, 50);
     builtTasks.push(makeTask(title, cursor, duration, index, index === 0));
     const buffer = input.style === 'full' ? 10 : 15;
     cursor += duration + buffer;
     if (cursor >= 720 && cursor - duration < 720) cursor += 35;
     if (cursor >= 1080 && cursor - duration < 1080) cursor += 30;
   });
-
-  if (input.style !== 'minimum' && builtTasks.length > 2) {
-    const firstAfternoon = builtTasks.findIndex((task) => task.section === 'day');
-    const insertAt = firstAfternoon > 0 ? firstAfternoon : Math.min(2, builtTasks.length);
-    const before = builtTasks[Math.max(0, insertAt - 1)];
-    const breakStart = before?.endTime ? timeToMinutes(before.endTime) + 5 : cursor;
-    builtTasks.splice(insertAt, 0, makeTask('Reset break — water, walk, breathe', breakStart, 15, 9, false));
-  }
 
   const loadMinutes = builtTasks.reduce((sum, task) => sum + task.durationMinutes, 0);
   const available = input.availableMinutes ?? Math.max(180, timeToMinutes(profile.sleepTime || '23:00') - roundedNow - 60);
@@ -173,11 +170,11 @@ export function rescueDayPlan(plan: DayPlan, input: RescueInput): DayPlan {
   };
 }
 
-export function createManualTask(title: string, planDate = dateKey()): Task {
+export function createManualTask(title: string, planDate = dateKey(), durationMinutes = 25): Task {
   const now = new Date();
   const startMinute = Math.ceil((now.getHours() * 60 + now.getMinutes()) / 5) * 5;
   return {
-    ...makeTask(title.trim(), startMinute, 25, 8, false, 'manual'),
+    ...makeTask(title.trim(), startMinute, Math.max(5, Math.min(480, durationMinutes)), 8, false, 'manual'),
     startTime: undefined,
     endTime: undefined,
     section: sectionForMinute(startMinute),
@@ -197,6 +194,7 @@ function recurrenceMatches(recurrence: TaskRecurrence, sourceDate: string, targe
   const daysSinceSource = Math.round((target.getTime() - source.getTime()) / 86_400_000);
   if (recurrence === 'biweekly') return daysSinceSource > 0 && daysSinceSource % 14 === 0;
   if (recurrence === 'monthly') return source.getDate() === target.getDate();
+  if (recurrence === 'yearly') return source.getMonth() === target.getMonth() && source.getDate() === target.getDate();
   return false;
 }
 

@@ -6,8 +6,8 @@ import { useAppTheme } from '@/context/theme-context';
 type TextVariant = 'display' | 'title' | 'heading' | 'body' | 'small' | 'caption' | 'label';
 
 const variants: Record<TextVariant, TextStyle> = {
-  display: { fontSize: 38, lineHeight: 43, fontWeight: '800', letterSpacing: -1.2 },
-  title: { fontSize: 28, lineHeight: 34, fontWeight: '800', letterSpacing: -0.7 },
+  display: { fontSize: 40, lineHeight: 44, fontWeight: '800', letterSpacing: -1.35 },
+  title: { fontSize: 30, lineHeight: 35, fontWeight: '800', letterSpacing: -0.85 },
   heading: { fontSize: 20, lineHeight: 26, fontWeight: '700', letterSpacing: -0.3 },
   body: { fontSize: 16, lineHeight: 23, fontWeight: '400' },
   small: { fontSize: 14, lineHeight: 20, fontWeight: '500' },

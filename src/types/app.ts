@@ -11,10 +11,10 @@ export type EnergyLevel = 1 | 2 | 3 | 4 | 5;
 export type PlanStyle = 'full' | 'realistic' | 'minimum';
 export type PlannerMode = 'ai-plan' | 'day-chain';
 export type TaskStatus = 'pending' | 'active' | 'completed' | 'skipped';
-export type TaskRecurrence = 'none' | 'daily' | 'weekdays' | 'weekly' | 'biweekly' | 'monthly';
+export type TaskRecurrence = 'none' | 'daily' | 'weekdays' | 'weekly' | 'biweekly' | 'monthly' | 'yearly';
 export type DaySection = 'morning' | 'day' | 'evening' | 'night';
 export type TaskCategory = 'focus' | 'work' | 'study' | 'fitness' | 'life' | 'rest';
-export type TaskColor = 'red' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'indigo' | 'violet' | 'pink' | 'gray';
+export type TaskColor = 'red' | 'coral' | 'orange' | 'gold' | 'yellow' | 'lime' | 'green' | 'mint' | 'teal' | 'cyan' | 'blue' | 'navy' | 'indigo' | 'violet' | 'purple' | 'pink' | 'magenta' | 'brown' | 'gray';
 
 export interface TaskSubtask {
   id: string;
@@ -328,6 +328,7 @@ export interface AppData {
 
 export interface PlanBuildInput {
   brainDump: string;
+  plannedTasks?: { title: string; durationMinutes: number }[];
   mustWin: string;
   fixedCommitments: string;
   energy: EnergyLevel;

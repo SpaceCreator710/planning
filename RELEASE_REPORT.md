@@ -2,7 +2,7 @@
 
 ## Implemented
 
-- OpenRouter server adapter and personal test connection with `deepseek/deepseek-v4-flash:free`.
+- Protected Groq server adapter with `openai/gpt-oss-120b`; users never enter an API key.
 - Apple Calendar/Reminders import, deleted-event reconciliation, protected important dates, duplicate-free plan writeback and automatic sync.
 - Built-in Flow Calendar with day/week/month/year navigation.
 - HealthKit read module plus saved health history, manual check-ins and a workout timer.
@@ -26,4 +26,4 @@
 - HealthKit, native Calendar/Reminders, widgets and Share Extensions require an iOS development or release build, not Expo Go.
 - Apple Notes supports sharing but not complete third-party database synchronization.
 - Store billing is represented in the UI; production receipt verification still requires the App Store/Play Store backend setup.
-- A free OpenRouter model can be rate-limited or unavailable and should have a paid production fallback.
+- Groq can be rate-limited or unavailable and should have a funded production fallback.

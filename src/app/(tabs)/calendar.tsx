@@ -6,6 +6,7 @@ import { AppButton } from '@/components/app/app-button';
 import { AppIcon } from '@/components/app/app-icon';
 import { AppText } from '@/components/app/app-text';
 import { Card } from '@/components/app/card';
+import { GlassIconButton } from '@/components/app/glass-icon-button';
 import { SlidingSegmentedControl } from '@/components/app/sliding-segmented-control';
 import { canUseDeviceIntegration } from '@/constants/subscriptions';
 import { radii, spacing, taskPalettes } from '@/constants/tokens';
@@ -92,12 +93,7 @@ export default function CalendarTab() {
           <AppText variant="title">Flow Calendar</AppText>
           <AppText variant="small" tone="secondary">Your plans and important device dates in one connected view.</AppText>
         </View>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => void syncApple()}
-          style={({ pressed }) => ({ width: 48, height: 48, borderRadius: 18, borderCurve: 'continuous', backgroundColor: colors.accentSoft, alignItems: 'center', justifyContent: 'center', opacity: pressed ? 0.7 : 1 })}>
-          <AppIcon name="arrow.triangle.2.circlepath" fallback="↻" color={colors.accent} animated={syncing} />
-        </Pressable>
+        <GlassIconButton icon="arrow.triangle.2.circlepath" accessibilityLabel="Sync Apple Calendar" active={syncing} onPress={() => void syncApple()} />
       </View>
 
       <SlidingSegmentedControl
@@ -208,8 +204,15 @@ function MonthView({ days, currentMonth, locale }: { days: Date[]; currentMonth:
           return (
             <Pressable key={dateKey(day)} onPress={() => router.push({ pathname: '/calendar-view', params: { date: dateKey(day) } })} style={{ width: '14.285%', minHeight: 68, padding: 3, opacity: muted ? 0.35 : 1 }}>
               <AppText variant="caption" style={{ textAlign: 'center' }}>{day.getDate()}</AppText>
-              <View style={{ gap: 2, paddingTop: 4 }}>
-                {tasks.slice(0, 3).map((task) => <View key={task.id} style={{ height: 7, borderRadius: radii.pill, backgroundColor: taskPalettes[(task.color ?? 'blue') as TaskColor].solid }} />)}
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 2, paddingTop: 4 }}>
+                {tasks.slice(0, 3).map((task) => {
+                  const tone = taskPalettes[(task.color ?? 'blue') as TaskColor];
+                  return (
+                    <View key={task.id} style={{ width: 17, height: 17, borderRadius: 9, alignItems: 'center', justifyContent: 'center', backgroundColor: tone.solid }}>
+                      <AppIcon name={(task.icon || 'circle.fill') as Parameters<typeof AppIcon>[0]['name']} fallback="•" color="#FFFFFF" size={9} />
+                    </View>
+                  );
+                })}
                 {tasks.length > 3 ? <AppText style={{ fontSize: 9, color: colors.textTertiary, textAlign: 'center' }}>+{tasks.length - 3}</AppText> : null}
               </View>
             </Pressable>
@@ -241,6 +244,11 @@ function YearView({ year, locale }: { year: number; locale: string }) {
                 <View key={task?.id ?? index} style={{ flex: 1, height: task ? Math.max(8, Math.min(38, task.durationMinutes / 3)) : 6, borderRadius: 5, backgroundColor: task ? taskPalettes[(task.color ?? 'blue') as TaskColor].solid : colors.surfaceMuted }} />
               ))}
             </View>
+            {tasks[0] ? (
+              <View style={{ width: 26, height: 26, borderRadius: 13, alignItems: 'center', justifyContent: 'center', backgroundColor: taskPalettes[(tasks[0].color ?? 'blue') as TaskColor].solid }}>
+                <AppIcon name={(tasks[0].icon || 'calendar') as Parameters<typeof AppIcon>[0]['name']} fallback="•" color="#FFFFFF" size={13} />
+              </View>
+            ) : null}
           </Card>
         );
       })}
@@ -262,10 +270,10 @@ function CompactChain({ tasks }: { tasks: Task[] }) {
               </View>
               {index < tasks.length - 1 ? <View style={{ flex: 1, minHeight: 10, width: 2, backgroundColor: tone.solid }} /> : null}
             </View>
-            <View style={{ flex: 1, paddingVertical: 7, paddingHorizontal: spacing.md, marginBottom: 2, borderRadius: radii.md, backgroundColor: `${tone.solid}18`, borderWidth: 1, borderColor: `${tone.solid}55` }}>
-              <AppText variant="caption" style={{ color: tone.solid }}>{task.allDay ? 'ALL DAY' : task.startTime || 'ANYTIME'} · {task.durationMinutes} MIN</AppText>
-              <AppText variant="label">{task.title}</AppText>
-              {task.externalImportance === 'important' ? <AppText variant="caption" tone="accent">Protected device date</AppText> : null}
+            <View style={{ flex: 1, paddingVertical: 9, paddingHorizontal: spacing.md, marginBottom: 3, borderRadius: 22, backgroundColor: tone.solid, boxShadow: `0 7px 18px ${tone.solid}28` }}>
+              <AppText variant="caption" style={{ color: 'rgba(255,255,255,0.78)' }}>{task.allDay ? 'ALL DAY' : task.startTime || 'ANYTIME'} · {task.durationMinutes} MIN</AppText>
+              <AppText variant="label" style={{ color: '#FFFFFF' }}>{task.title}</AppText>
+              {task.externalImportance === 'important' ? <AppText variant="caption" style={{ color: '#FFFFFF', fontWeight: '800' }}>Protected device date</AppText> : null}
             </View>
           </View>
         );

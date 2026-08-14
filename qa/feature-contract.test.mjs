@@ -19,15 +19,13 @@ contains('netlify.toml', 'base = "."');
 contains('netlify.toml', 'command = "npm run export:web"');
 contains('netlify.toml', 'publish = "dist"');
 
-// The exact user-selected model is fixed on both protected and personal-key
-// routes. Production secrets must never be exposed as EXPO_PUBLIC variables.
-const model = 'deepseek/deepseek-v4-flash:free';
-contains('src/services/openrouter-client.ts', model);
+// The structured-output-capable Groq model is fixed on the protected route.
+// Production secrets must never be exposed as EXPO_PUBLIC variables.
+const model = 'openai/gpt-oss-120b';
 contains('netlify/functions/ai.mjs', model);
-contains('.env.example', 'OPENROUTER_API_KEY=');
-assert.doesNotMatch(read('.env.example'), /EXPO_PUBLIC_OPENROUTER|EXPO_PUBLIC_AI_KEY/);
-contains('src/services/personal-key-storage.native.ts', 'SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY');
-contains('src/services/personal-key-storage.ts', 'sessionStorage');
+contains('.env.example', 'GROQ_API_KEY=');
+assert.doesNotMatch(read('.env.example'), /EXPO_PUBLIC_GROQ|EXPO_PUBLIC_AI_KEY/);
+assert.doesNotMatch(read('src/app/ai-setup.tsx'), /personal.*key|OpenRouter/i);
 
 // Dedicated product areas and planning horizons.
 for (const tab of ['today', 'calendar', 'health', 'notes', 'coach', 'profile']) {
@@ -62,7 +60,10 @@ for (const canvas of ['paper', 'blush', 'mist', 'sage', 'lavender', 'midnight'])
 contains('src/components/app/task-card.tsx', 'LinearTransition.springify()');
 contains('src/components/app/task-card.tsx', 'Gesture.Pan()');
 contains('src/components/app/sliding-segmented-control.tsx', 'withSpring');
-contains('src/components/app/task-card.tsx', "width: 2, borderRadius: 2");
+contains('src/components/app/task-card.tsx', 'backgroundColor: active ? colors.accent : tone.solid');
+contains('src/services/task-appearance.ts', "'figure.yoga'");
+contains('src/app/plan-builder.tsx', 'plannedTasks');
+contains('src/app/task-editor.tsx', "'monthly', 'yearly'");
 
 // Commercial split and the two differentiated planning systems.
 const subscriptions = read('src/constants/subscriptions.ts');
@@ -71,7 +72,6 @@ for (const price of ['monthlyPrice: 2.99', 'annualPrice: 17.99', 'monthlyPrice: 
 }
 assert.ok(exists('src/services/capacity-twin.ts'));
 contains('src/services/capacity-twin.ts', 'detectScheduleCollisions');
-contains('src/services/ai-client.ts', 'Never insult, humiliate, threaten, shame');
 contains('netlify/functions/ai.mjs', 'Never insult, humiliate, shame, threaten');
 
 // App Store text limits and release-name hygiene.
@@ -92,7 +92,7 @@ const versionScanFiles = [
   ...fs.readdirSync(path.join(root, 'docs')).filter((name) => /\.(md|txt)$/.test(name)).map((name) => `docs/${name}`),
 ];
 const brandingText = versionScanFiles
-  .map((relativePath) => read(relativePath).replaceAll('DeepSeek V4', 'DeepSeek MODEL').replaceAll(model, 'deepseek/MODEL'))
+  .map((relativePath) => read(relativePath))
   .join('\n');
 assert.doesNotMatch(brandingText, /\bV\d+(?:\.\d+)*\b/i, 'Release-version branding must not appear in user-facing documents');
 

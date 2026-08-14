@@ -22,11 +22,11 @@ export default function CoachScreen() {
   const { data, updateSettings, sendCoachMessage } = useApp();
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
-  const [connectionNote, setConnectionNote] = useState('');
   const [aiStatus, setAIStatus] = useState<AIConnectionStatus | 'checking'>('checking');
   const scrollRef = useRef<ScrollView>(null);
   const plan = subscriptionPlans[data.subscription];
   const remaining = Math.max(0, plan.limits.coachMessagesPerDay - data.usage.coachMessages);
+  const modeColor = data.settings.coachMode === 'soft' ? colors.success : data.settings.coachMode === 'strict' ? colors.info : colors.accent;
 
   useEffect(() => {
     const timeout = setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 80);
@@ -55,7 +55,6 @@ export default function CoachScreen() {
     const trimmed = value.trim();
     if (!trimmed || sending) return;
     setInput('');
-    setConnectionNote('');
     setSending(true);
     const result = await sendCoachMessage(trimmed);
     setSending(false);
@@ -64,7 +63,6 @@ export default function CoachScreen() {
       else setInput(trimmed);
       return;
     }
-    if (result.fallback) setConnectionNote('The protected AI connection was unavailable, so a local safety reply was used.');
   }
 
   return (
@@ -75,6 +73,11 @@ export default function CoachScreen() {
           contentInsetAdjustmentBehavior="automatic"
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ padding: spacing.md, paddingBottom: 170, gap: spacing.md }}>
+          <View style={{ gap: 3 }}>
+            <AppText variant="title">Coach</AppText>
+            <AppText variant="small" tone="secondary">One clear next move, shaped around your real day.</AppText>
+          </View>
+
           <Card muted style={{ flexDirection: 'row', alignItems: 'center', padding: spacing.sm }}>
             <BrandMark size={38} />
             <View style={{ flex: 1, gap: 2 }}>
@@ -93,8 +96,8 @@ export default function CoachScreen() {
               { value: 'aggressive', label: canUseCoachMode(data.subscription, 'aggressive') ? 'Aggressive' : 'Aggressive · lock' },
             ]}
           />
-          <Card muted style={{ padding: spacing.sm }}>
-            <AppText variant="caption" tone={data.settings.coachMode === 'soft' ? 'success' : 'accent'}>
+          <Card bordered={false} style={{ padding: spacing.md, borderRadius: 28, backgroundColor: modeColor, boxShadow: `0 9px 25px ${modeColor}30` }}>
+            <AppText variant="caption" style={{ color: '#FFFFFF', fontWeight: '900' }}>
               {data.settings.coachMode === 'soft'
                 ? 'SOFT · extremely kind, patient, tiny next steps, no guilt'
                 : data.settings.coachMode === 'strict'
@@ -102,20 +105,6 @@ export default function CoachScreen() {
                   : 'AGGRESSIVE · provocative confrontation of avoidance, short commands, never insults or humiliation'}
             </AppText>
           </Card>
-
-          {connectionNote ? (
-            <Card muted style={{ padding: spacing.sm }}>
-              <AppText variant="caption" tone="warning">{connectionNote}</AppText>
-            </Card>
-          ) : null}
-
-          {aiStatus !== 'online' && aiStatus !== 'checking' && !connectionNote ? (
-            <Pressable onPress={() => router.push('/settings')}>
-              <Card muted style={{ padding: spacing.sm }}>
-                <AppText variant="caption" tone="warning">Built-in AI is not online. Local safety replies remain available; open Settings to diagnose the server connection.</AppText>
-              </Card>
-            </Pressable>
-          ) : null}
 
           <View style={{ gap: spacing.sm }}>
             {data.messages.map((message) => {
@@ -130,8 +119,7 @@ export default function CoachScreen() {
                       borderRadius: radii.lg,
                       borderCurve: 'continuous',
                       backgroundColor: user ? colors.accent : message.safetyOverride ? colors.successSoft : colors.surface,
-                      borderWidth: user ? 0 : 1,
-                      borderColor: message.safetyOverride ? colors.success : colors.border,
+                      borderWidth: 0,
                     }}>
                     <AppText style={{ color: user ? '#FFFFFF' : colors.text }}>{message.content}</AppText>
                   </View>
@@ -140,7 +128,7 @@ export default function CoachScreen() {
             })}
             {sending ? (
               <View style={{ alignItems: 'flex-start' }}>
-                <View style={{ paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: radii.lg, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }}>
+                <View style={{ paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: radii.lg, backgroundColor: colors.surface }}>
                   <AppText tone="tertiary">Thinking…</AppText>
                 </View>
               </View>

@@ -24,9 +24,8 @@ export function Chip({ label, selected, color, onPress, style, ...props }: ChipP
           paddingHorizontal: spacing.sm,
           paddingVertical: spacing.xs,
           borderRadius: radii.pill,
-          borderWidth: 1,
-          borderColor: selected ? accent : colors.border,
-          backgroundColor: selected ? `${accent}18` : colors.surface,
+          borderWidth: 0,
+          backgroundColor: selected ? accent : color ? `${accent}22` : colors.surfaceMuted,
           opacity: pressed ? 0.7 : 1,
           alignItems: 'center',
           justifyContent: 'center',
@@ -34,7 +33,7 @@ export function Chip({ label, selected, color, onPress, style, ...props }: ChipP
         typeof style === 'function' ? style({ pressed }) : style,
       ]}
       {...props}>
-      <AppText variant="caption" style={{ color: selected ? accent : colors.textSecondary }}>
+      <AppText variant="caption" style={{ color: selected ? '#FFFFFF' : color ?? colors.textSecondary, fontWeight: selected ? '800' : '700' }}>
         {label}
       </AppText>
     </Pressable>

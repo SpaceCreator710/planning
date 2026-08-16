@@ -1,21 +1,81 @@
-The MIT License (MIT)
+Copyright (c) 2026 Denis Usachev (Усачёв Денис Артемович). All Rights Reserved.
 
-Copyright (c) 2015-present 650 Industries, Inc. (aka Expo)
+STRICT PROPRIETARY LICENSE — NO PERMISSIONS GRANTED
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This repository and all of its contents, including but not limited to
+source code, object code, documentation, design files, assets, data,
+algorithms, architecture, user interface, and any other materials
+(collectively, the "Software") are the exclusive property of the
+copyright holder identified above.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This Software is made publicly viewable for informational and
+portfolio purposes ONLY. No license, right, or permission of any kind
+is granted to any person or entity by virtue of this Software being
+publicly visible.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+WITHOUT THE PRIOR EXPRESS WRITTEN CONSENT OF THE COPYRIGHT HOLDER, NO
+PERSON OR ENTITY MAY:
+
+1.  Copy, reproduce, or duplicate the Software or any portion of it,
+    in whole or in part, in any form or by any means.
+
+2.  Modify, adapt, translate, reverse engineer, decompile, disassemble,
+    or create derivative works based on the Software.
+
+3.  Distribute, publish, sublicense, rent, lease, lend, or otherwise
+    make the Software available to any third party.
+
+4.  Use the Software, in whole or in part, for any commercial purpose,
+    including but not limited to selling, offering as a service,
+    incorporating into another product, or generating revenue directly
+    or indirectly.
+
+5.  Use the Software for any non-commercial purpose beyond personal,
+    private viewing of the publicly hosted repository.
+
+6.  Fork, clone, mirror, or otherwise replicate this repository for any
+    purpose other than viewing it in place on its original hosting
+    platform.
+
+7.  Use any idea, concept, feature, workflow, algorithm, name, brand
+    element, or user experience pattern embodied in the Software to
+    build, market, or operate a competing or similar product or
+    service.
+
+8.  Use the Software or any part of it as training data, fine-tuning
+    data, or input of any kind for machine learning models, artificial
+    intelligence systems, or automated code-generation tools.
+
+9.  Remove, obscure, or alter any copyright, trademark, or other
+    proprietary notice contained in the Software.
+
+10. Claim authorship, ownership, or origination of the Software or any
+    portion of it.
+
+NO IMPLIED LICENSE. The public availability of this repository (for
+example, on GitHub or any other hosting platform, including for
+purposes of participation in third-party programs such as open-source
+support or tooling programs) does NOT constitute, and shall NOT be
+construed as, a grant of any open-source license, implied license, or
+waiver of any rights by the copyright holder. All rights not expressly
+granted in a separate, signed written agreement are reserved.
+
+NO WARRANTY. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR
+ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ENFORCEMENT. Any unauthorized use, copying, modification, or
+distribution of the Software will be treated as a violation of
+copyright law and may result in civil and/or criminal penalties to the
+fullest extent permitted by law. The copyright holder reserves the
+right to pursue all available legal remedies, including injunctive
+relief and monetary damages, against any infringing party in any
+applicable jurisdiction.
+
+CONTACT. Requests for licensing, partnership, collaboration, or any
+other use not covered above must be directed in writing to the
+copyright holder and require explicit written approval before any such
+use may occur.

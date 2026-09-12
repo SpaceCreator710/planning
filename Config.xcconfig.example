@@ -1,0 +1,6 @@
+// Example public configuration. Never place GEMINI_API_KEY here.
+SUPABASE_URL = https:/$()/YOUR-PROJECT.supabase.co
+SUPABASE_PUBLISHABLE_KEY = sb_publishable_REPLACE_ME
+AI_API_BASE_URL = https:/$()/YOUR-PROJECT.supabase.co/functions/v1/planning-ai
+ACCOUNTS_ENABLED = YES
+SUBSCRIPTIONS_ENABLED = YES

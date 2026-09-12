@@ -1,0 +1,3 @@
+PlanningApp.swift: syntax PASS
+Exact Foundation build-number comparison/write block: typecheck PASS
+AppIntents invocation excluded; full Apple SDK build not available.

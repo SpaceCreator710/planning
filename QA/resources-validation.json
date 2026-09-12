@@ -1,0 +1,9 @@
+{
+  "checks": {
+    "plists": 9,
+    "asset_catalogs": 25,
+    "xml": 2,
+    "png": 25
+  },
+  "errors": []
+}

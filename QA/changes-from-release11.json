@@ -1,0 +1,230 @@
+{
+  "baseline": "Planning-1.0.0-RELEASE-11(1).zip",
+  "baseline_sha256": "09a733db85976030eca15f7f8b3402fb92d6166c2ef0d83cb7dbb1c795411de2",
+  "release": 12,
+  "changes": [
+    {
+      "path": "Planning.xcodeproj/project.pbxproj",
+      "status": "modified",
+      "before_sha256": "7a75aaf1f2e5798164d68d3783de27bf6910fdf7b8cccf67b1b4aa967672f903",
+      "after_sha256": "85615da0ad7321a47260f2050ada54dc96052f51b365e2ffe9e5700d364268a0"
+    },
+    {
+      "path": "Planning/App/PlanningApp.swift",
+      "status": "modified",
+      "before_sha256": "be94c878af12596bc2fd259bf6a029010cf6a13af70aa011eeb904e4435bbbcf",
+      "after_sha256": "c48a8fdae218353618b60e07a09cc5e49eba5275404bfc498dc2214179843942"
+    },
+    {
+      "path": "Planning/App/RootView.swift",
+      "status": "modified",
+      "before_sha256": "ef7e9e71e33114c7e9f4c0ac6b3e5acafd7f2ddcc4285817dab0c9e330640d96",
+      "after_sha256": "9a5bb8b5daff15c2537bb2252c03f745825de20db49de27b99d758e3d71e34fd"
+    },
+    {
+      "path": "Planning/Design/DesignSystem.swift",
+      "status": "modified",
+      "before_sha256": "d1bb59b436535057e521111517def1144211bdad7b2033ce7ad55f137a478f7d",
+      "after_sha256": "bde443b568f3a6095f3a0289462e8f1392b743c8e7c7dedf61be394a7f294370"
+    },
+    {
+      "path": "Planning/Features/Calendar/CalendarHomeView.swift",
+      "status": "modified",
+      "before_sha256": "ea6695592438d7d0ea54629ebef970b2db492207d5a776e87faa173cee8b8495",
+      "after_sha256": "da7310d80cfffaf4f49c5cd17d43dd6dac29023ad5a0f2223f01929e9f03a4ac"
+    },
+    {
+      "path": "Planning/Features/Coach/CoachView.swift",
+      "status": "modified",
+      "before_sha256": "d8943c43f1d65e9360252c1a74cd27b3e6d7ccb5a4f053eacefea7a8437c5054",
+      "after_sha256": "42711a464c7766dbca9d4c87405b153d39ea65acdf8bd7bb6df9d023776d20fe"
+    },
+    {
+      "path": "Planning/Features/Focus/FocusView.swift",
+      "status": "modified",
+      "before_sha256": "eb8d934073cbc355b8a0886d6cf0b946a9004b21ca1373d8db22a5746c66462a",
+      "after_sha256": "899d721b0f665682d40af4371ee21eda792f61c415e201a767cb7e7a92122721"
+    },
+    {
+      "path": "Planning/Features/Goals/GoalsView.swift",
+      "status": "modified",
+      "before_sha256": "c4c1173f210b89c19fc5e21f1978145b8fb3329e0f0de1b10f32d591508506b2",
+      "after_sha256": "f5c21057e2c039aa1cbf4ef00f9a450d1845f770bf062b09d599b2e82aec0d3a"
+    },
+    {
+      "path": "Planning/Features/Health/HealthView.swift",
+      "status": "modified",
+      "before_sha256": "80d7583b89eef1a8306680ef1cc7afcd3a9d06967c160da2ee2b0c47bbe0a0e4",
+      "after_sha256": "9b5182094eaefca161c577038b5fed394170b7de80056124806933619e5398b9"
+    },
+    {
+      "path": "Planning/Features/Inbox/InboxView.swift",
+      "status": "modified",
+      "before_sha256": "f7d23ab07aa40a1d683b268bb398de108eb75d20598b07050736f200d0914fd9",
+      "after_sha256": "8eaa38a13e3e3196c7754cbd732f97e6905928a8174947c977a4de29e6dd1647"
+    },
+    {
+      "path": "Planning/Features/Integrations/IntegrationsView.swift",
+      "status": "modified",
+      "before_sha256": "8c4b4cd329888a1f4f3e075763c8c4b8187f38edb8a08bc51d78e7125899dbb3",
+      "after_sha256": "41416cf5a5902abfed3e4f8841bb752706ed0f41f9acf29dc2c19179b3fdb8f3"
+    },
+    {
+      "path": "Planning/Features/Memory/MemoryView.swift",
+      "status": "modified",
+      "before_sha256": "bad9c27ea5a495a14e47d231e7ca2ee1ed65988ad263f4849ae202713875596c",
+      "after_sha256": "9b43a8a43a6505e4e8f05094f4d832f20e53a917fda06ae75a3d5156870732e5"
+    },
+    {
+      "path": "Planning/Features/Notes/NotesView.swift",
+      "status": "modified",
+      "before_sha256": "5df64ca5de273c12b97d2e5ba262d0d6de3bee37b2da3ebbd8387f659202059b",
+      "after_sha256": "1cf5d122a6a092fb0b1634768cc8ca19fb7eca3e98c74fb7dd0d18d135eee656"
+    },
+    {
+      "path": "Planning/Features/Paywall/PaywallView.swift",
+      "status": "modified",
+      "before_sha256": "5d8b906ea13b3db88b4cc85532d68f94909d83f376cbe692c4b41664ee2e385b",
+      "after_sha256": "63e5ec132fc4915c4587b2e937f9d9efe1df05f16a03d53df03e3ecea7efe3de"
+    },
+    {
+      "path": "Planning/Features/Planning/HorizonPlannerView.swift",
+      "status": "modified",
+      "before_sha256": "6e7bcb2458693a25a90a44e7e53510beffa5b426655ffddcec9c6daf3fcfd058",
+      "after_sha256": "ca3bd6fdf4ad19c33d955ef3b3a621e5e269813a141068df103f4dc2ea3a9fc7"
+    },
+    {
+      "path": "Planning/Features/Planning/PlanBuilderView.swift",
+      "status": "modified",
+      "before_sha256": "6b4b7f3e09b21b14f6af7a9c1a336b9050bb21212d56661ed5865e918683d2a4",
+      "after_sha256": "bd4c31c98fcf239e9ca409e546c4b04b1aa8dbdb67ebd5e689d9b6581414f4ce"
+    },
+    {
+      "path": "Planning/Features/Planning/RescueView.swift",
+      "status": "modified",
+      "before_sha256": "032da2deac53053461227dc17379d1393ad017f85717d6b7c8dd393bc7043478",
+      "after_sha256": "b832233a106382af34abfb552fbe62c81e258f8ec7987b4ba712b18a2ed8eb5e"
+    },
+    {
+      "path": "Planning/Features/Profile/ProfileView.swift",
+      "status": "modified",
+      "before_sha256": "604be79dfa42aa9e4de0fa1488bc49c9070e8341b07ae3386731dbaa6db8fc03",
+      "after_sha256": "4e91cf30daf93fc4cd195f4b95d8805de151832e0a845f6b042d8414c036c7c6"
+    },
+    {
+      "path": "Planning/Features/Profile/SettingsView.swift",
+      "status": "modified",
+      "before_sha256": "3a1c5b3139aa0e61d12aab81d77f793ab3fe881efaa7d8f0e805d21d11453f7f",
+      "after_sha256": "dc790b0b342495ff4074c8a1b8c99d98ae8828fa8f8d4c273857891a6cfdc372"
+    },
+    {
+      "path": "Planning/Features/Progress/ProgressView.swift",
+      "status": "modified",
+      "before_sha256": "7ef81a6b5fc9d1a1a2fb866bb6d26c18ffd25f8256cd7ea3c19c27d047d246bd",
+      "after_sha256": "4b8648030a041e06c4edcb384b03f66fd44dc368c7ec1eef74789fb2581e3849"
+    },
+    {
+      "path": "Planning/Features/Review/DayReviewView.swift",
+      "status": "modified",
+      "before_sha256": "7b6013db9e1a69427be381a196e8f85ecc0eb932222a81b9f62a180e70864a83",
+      "after_sha256": "4514bc8932cb569bdfdd11fec092aa93dd7d5672c9bda90448e83e45ba6600fb"
+    },
+    {
+      "path": "Planning/Features/Tasks/TaskEditorView.swift",
+      "status": "modified",
+      "before_sha256": "879a7ebf3fac296577c4097f124b5001ae4c0ee83a33615293bd6c223d05499d",
+      "after_sha256": "213ec5b71dc2bc0ead2da5c3d8e0a873308893630ba7001ebc31f85b972b12b2"
+    },
+    {
+      "path": "Planning/Features/Today/TodayView.swift",
+      "status": "modified",
+      "before_sha256": "d1578e0e1d3b0b88088e467f8e7ff71b45d7228df4674d097ed5d271346c4de0",
+      "after_sha256": "3efdfbd19c97b5b2f0c122490ab546ceed0e55109794bebb37acb79190104753"
+    },
+    {
+      "path": "Planning/Models/DateKey.swift",
+      "status": "modified",
+      "before_sha256": "3a4f56c7a9de435c185d4b7f62a3744c13300716694ba31df43cc5861d511993",
+      "after_sha256": "befe9306068d90e506a8e8c8e1f5538250a8b88f9b1ffebad91b2362eefc0a7d"
+    },
+    {
+      "path": "Planning/Models/DomainModels.swift",
+      "status": "modified",
+      "before_sha256": "951d8accb2456725f288ded6d0f901f0964dfd392a4dc1f9cd06d671e9543763",
+      "after_sha256": "09af613f67da21f0bb3e7d2a311d4073a044659297483afc5b73c78d6845e5d2"
+    },
+    {
+      "path": "Planning/Store/AppStore.swift",
+      "status": "modified",
+      "before_sha256": "bf362034a6369567156f36daf986de9b3bbcf9c616649679bb4980d1541169e5",
+      "after_sha256": "df3c34fc4a3d619507535645a392116759ea118deb9aff53e44d5ab9d50f1fe1"
+    },
+    {
+      "path": "QA/DEVICE_ACCEPTANCE.md",
+      "status": "modified",
+      "before_sha256": "f698d545ca3c9a12ec3ee96161c163964762d54417dd9eee87397bea2917f5ef",
+      "after_sha256": "79397f99129f72468289d317b9b53204355e6427b3396d890363911bed7b79a8"
+    },
+    {
+      "path": "QA/StoreRegressionTests.swift",
+      "status": "modified",
+      "before_sha256": "d6c4154853f22a99803d62634deffce2f40bd52d6efa298363a8b72fc74298bf",
+      "after_sha256": "e95661c17edea06096239a8e6457c630ff0ca62330a761d6dd6ae531b3468a7d"
+    },
+    {
+      "path": "QA/backend-last-run.log",
+      "status": "modified",
+      "before_sha256": "1a9a972da4d99ac29fa406507f7c361f196f0449787e6dd542f194c22a2e798e",
+      "after_sha256": "a6ac8baa69993ad86494190836dbe2c1a799a0bb22596160f0b184f3b322c672"
+    },
+    {
+      "path": "QA/hotfix-build-scope.log",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "a1c75ac59c1bf7725d2a69e339f242434116978a5b6a1b715a4f29874497d28c"
+    },
+    {
+      "path": "QA/resources-validation.json",
+      "status": "modified",
+      "before_sha256": "fdc37e05d01958bb84363a58d1ba9e5ee4ca3b63fef1174a236fca9578dc0884",
+      "after_sha256": "26d66e6e7d3dd2ea2112f446870fa17bb691ff841ef334554133c8aecb8ec251"
+    },
+    {
+      "path": "QA/source-sha256.json",
+      "status": "modified",
+      "before_sha256": "a2ad3ddd38455e58d676ab0633e5bdfe4d17a72af4c168303274ee2c144f1ba3",
+      "after_sha256": "3088b08bf582f48ccf89ac41564987f5db768c12c94c6349e3a36c1944eddeee"
+    },
+    {
+      "path": "QA/store-last-run.log",
+      "status": "modified",
+      "before_sha256": "e075581693328be2135ed3580fd6788802ed070eaf97c3ce9d1ff221949897ad",
+      "after_sha256": "4345727934ca0cd0379305d4b74b5c6b00d6f73b5c849186d48b39063725eee8"
+    },
+    {
+      "path": "QA/swift-syntax.json",
+      "status": "modified",
+      "before_sha256": "a8540f452a4de6ee1b9142399a5042dc7d367bf44b745d33a75ba9224d18e3e1",
+      "after_sha256": "885fc58a3decfbc755377e61d6433b1ee669d50c9fa01d901c453099504fc722"
+    },
+    {
+      "path": "QA_REPORT.md",
+      "status": "modified",
+      "before_sha256": "a25693cd47783cfeabc1bb7578004f42abcdbb84ff13114be8e1b24841d56df3",
+      "after_sha256": "82010991c870cda7b86d855f1b18723794444e35babf30fc2a3697cf5fd269f0"
+    },
+    {
+      "path": "README.md",
+      "status": "modified",
+      "before_sha256": "94de0524b8814653da1c3eae02a4a987e27438e0f4eb5a37c0bdfd8483757553",
+      "after_sha256": "60a95c3ee14b7242ffa5983ac09afedd759688cc845f4f8b311b63813215a4f5"
+    },
+    {
+      "path": "RELEASE_12_REPORT_RU.md",
+      "status": "added",
+      "before_sha256": null,
+      "after_sha256": "ce9a759af0cf492caed6d2b8a4b8024bbc3f32029e9d8b1106e7686a6b789c85"
+    }
+  ],
+  "removed_files": []
+}

@@ -1,0 +1,6 @@
+{
+  "compiler": "Swift 6.2.3 -parse -swift-version 6",
+  "files": 49,
+  "errors": [],
+  "note": "Syntax only; Apple SDK typechecking is not available."
+}

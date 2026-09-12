@@ -1,0 +1,11 @@
+// Public build configuration. Provider secrets stay server-side.
+// $() is intentionally used so xcconfig does not treat // inside URLs as a comment.
+SUPABASE_URL = https:/$()/xlopoistxuihnhjtentb.supabase.co
+SUPABASE_PUBLISHABLE_KEY = sb_publishable_z9_vAnROPkGQjeCpVC9piw_r8uXoRzh
+AI_API_BASE_URL = https:/$()/xlopoistxuihnhjtentb.supabase.co/functions/v1/planning-ai
+
+// Account cloud is enabled; provider credentials remain server-side in Supabase.
+ACCOUNTS_ENABLED = YES
+
+// StoreKit product IDs are wired in-app. App Store Connect supplies localized prices/availability.
+SUBSCRIPTIONS_ENABLED = YES

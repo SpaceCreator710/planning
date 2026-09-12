@@ -1,34 +1,43 @@
 # Architecture
 
-## Cross-platform client
+Planning 1.0.0 is an Apple-native client with a small protected server boundary for AI inference.
 
-- Expo SDK 57, React Native, Expo Router and Reanimated.
-- `AppProvider` owns versioned local state, plans, device imports, notes, health summaries, subscriptions and behavior history.
-- Platform-specific adapters keep native APIs out of Web bundles: `device-calendar`, `health-bridge` and widget bridge.
-- Completed tasks and protected calendar events survive every AI and offline replan.
+```text
+SwiftUI app
+├─ SwiftData / local app state
+├─ EventKit (Calendar)
+├─ HealthKit
+├─ UserNotifications
+├─ StoreKit 2
+├─ WidgetKit / ActivityKit / App Intents
+├─ Share Extension
+├─ Supabase client boundary
+└─ HTTPS → Netlify AI boundary → Groq/provider
+```
 
-## Protected AI path
+## Targets
 
-1. The client sends minimum required planning context to `/api/ai`.
-2. Netlify routes it to `netlify/functions/ai.mjs`.
-3. The function calls Groq with `model="openai/gpt-oss-120b"` and a server-only bearer key.
-4. The provider response is normalized and validated before it can alter product state.
-5. If remote AI is unavailable, deterministic local planning keeps the app usable.
+### Planning
+The main iPhone/iPad application. It owns navigation, onboarding, planning, task editing, themes, AI Coach, health/capacity views, goals, habits, notes, focus, progress and settings.
 
-There is no personal-key path in the product. Users always call the protected server endpoint.
+### PlanningWidgets
+Contains the planner widget, Focus Live Activity and Control Center/App Intent controls. Shared user-visible state crosses the process boundary through the configured App Group snapshot.
 
-## Apple data path
+### ShareExtension
+Accepts text, URLs and supported shared content and writes an import payload through the App Group for the main app to consume safely.
 
-- Expo Calendar requests explicit Calendar and Reminders permissions, imports a bounded date range and upserts by external identifiers.
-- Important all-day dates and fixed events are marked protected for replanning.
-- The local `capacity-health` Expo module requests read-only HealthKit types and returns day summaries.
-- Raw HealthKit objects stay on device. The AI receives only an optional coarse capacity context.
-- Expo Sharing provides incoming text/URL sharing and system share-sheet export. It does not read the Apple Notes database.
-- Expo Widgets publishes a compact next-action snapshot through the shared app group.
+## Product engines
 
-## Privacy and safety
+- Reality Engine / Drift Guard detects plan drift and recovery opportunities.
+- Capacity Twin estimates practical workload from planned commitments and optional private wellness summaries.
+- Plan DNA derives behavioral planning patterns from local history.
+- Body Rhythm supplies optional time-of-day context.
+- Collision checks protect fixed calendar commitments before replanning.
 
-- No provider, Supabase service-role, billing or webhook secret is present in the client bundle.
-- Calendar and health sync are opt-in and remain useful when disabled.
-- Health features do not diagnose, count calories, set weight targets or pressure exercise.
-- Aggressive coaching remains action-focused and cannot insult, shame, threaten or target a person's identity or health.
+## AI boundary
+
+The Swift client never contains a Groq/provider secret. Requests go to `Backend/netlify/functions/ai.mjs`, which validates the requested schema/operation and uses a server-held provider key.
+
+## Data migration
+
+The native client retains V7 JSON import/export compatibility so existing Expo-era planning data can be migrated rather than discarded.

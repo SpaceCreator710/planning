@@ -1,0 +1,7 @@
+Backend/qa/server-function.test.mjs EXIT 0
+Server AI boundary tests passed.
+
+Backend/qa/ai-contract.test.mjs EXIT 0
+AI contract tests: PASS (117 actions, 72 settings, 19 profile fields; both handlers exercised)
+(node:16) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

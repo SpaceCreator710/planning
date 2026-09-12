@@ -1,0 +1,57 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ios-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-and-build:
+    runs-on: macos-26
+    timeout-minutes: 35
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node for backend contract checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Toolchain
+        run: |
+          swift --version
+          xcodebuild -version
+
+      - name: Validate project and privacy manifests
+        run: |
+          plutil -lint Planning.xcodeproj/project.pbxproj
+          plutil -lint Planning/Info.plist PlanningWidgets/Info.plist ShareExtension/Info.plist
+          plutil -lint Planning/PrivacyInfo.xcprivacy PlanningWidgets/PrivacyInfo.xcprivacy ShareExtension/PrivacyInfo.xcprivacy
+          plutil -lint Planning/Planning.entitlements PlanningWidgets/PlanningWidgets.entitlements ShareExtension/ShareExtension.entitlements
+
+      - name: Core regression tests
+        run: bash QA/run-core-tests.sh
+
+      - name: AppStore regression tests
+        run: bash QA/run-store-tests.sh
+
+      - name: Backend boundary tests
+        run: |
+          node Backend/qa/server-function.test.mjs
+          node Backend/qa/ai-contract.test.mjs
+
+      - name: Build iOS app and extensions
+        run: |
+          xcodebuild \
+            -project Planning.xcodeproj \
+            -target Planning \
+            -configuration Release \
+            -sdk iphonesimulator \
+            CODE_SIGNING_ALLOWED=NO \
+            build
